@@ -79,7 +79,7 @@ From the ledger closing to "Paid" on the customer's screen takes about 5–10 se
    - **Payment reference**: the memo the customer must include, `RD` + 8 characters (e.g. `RD7K2M9QXA`)
 3. **Merchant shares the link** by copy, WhatsApp, email or QR.
 4. **Customer opens the page.** They see the ZAR amount, the exact USDC to send, the network (Stellar Testnet), the asset, the merchant's address, the reference, step-by-step instructions, a QR code and a live status.
-5. **Customer pays**, either with *Pay with Freighter* (one click) or from any Stellar wallet by entering the address, amount and memo. The ledger closes about 5 s later.
+5. **Customer pays**, either with *Pay with wallet* (Freighter, xBull or Albedo, one click) or from any Stellar wallet by entering the address, amount and memo. The ledger closes about 5 s later.
 6. **Worker detects it.** Every 2 s it reads new payment events from Stellar RPC and keeps those sent to any merchant wallet Randi watches.
 7. **Worker verifies it** in one database transaction:
    - records the event once (a duplicate event stops here)

@@ -19,7 +19,7 @@ The frontend **never decides** whether something is paid. It shows what the API 
 | Styling | Plain CSS with design tokens (CSS variables) in one global stylesheet, plus small component classes. No UI kit |
 | Data | Typed fetch client built on the shared Zod schemas (`packages/shared`); cookies sent with requests |
 | Live status | Server-Sent Events, with polling every 5 s as fallback |
-| Wallet | Freighter browser extension API (sign message for wallet proof; sign + submit payment on the payment page) |
+| Wallet | Stellar Wallets Kit: Freighter (default), xBull, Albedo. Sign message for wallet proof (Freighter, or any kit wallet that supports SEP-53); sign + submit payment on the payment page |
 | QR codes | A small QR library rendering the SEP-7 payment link |
 | Tests | Component tests (Vitest + Testing Library) and end-to-end (Playwright) |
 
@@ -55,8 +55,14 @@ photography of real people in bold colour, very round surfaces, pill buttons, a 
 marquee, expanding cards, and a page that lifts off a dark footer. The brand, colours, type, copy
 and photos are Randi's own; nothing is copied from the reference.
 
+That pattern is for the **landing page**. The merchant area is a plain **fintech dashboard** (§2.8):
+same colours and type, but a dark sidebar, white cards and smaller text, because merchants use it
+every day.
+
 Visual reference: the **Randi design** canvas (https://claude.ai/artifact/8PLRDWPvpX3ahEnSbpmp1P):
-landing page (press Play), system, logo, motion and the four product screens.
+landing page, system, logo, motion, every dashboard page on desktop, the dashboard on mobile, sign
+up / sign in with setup, and the customer pay and connect-wallet flow. Boards marked Play are
+clickable.
 
 ### 2.1 Rules that are not style
 
@@ -101,7 +107,7 @@ corners and lifts off the ink footer.
 | Hero entrance | Headline rises 900 ms; request card floats in at 500 ms; Paid pill pops at 1.2 s; both then float ±14 px, 5–6 s, alternate |
 | Marquee | Business types ("Salons ✦ Spaza shops ✦ Bakeries…"), 38 s linear loop |
 | 3D card carousel | Example requests on photo cards; every 3.2 s, 1500 ms `cubic-bezier(.87,.12,.11,.88)`, perspective 1800 px, ±16° turn |
-| Pill switch | Merchants / Customers and pricing mode; 620 ms `cubic-bezier(.73,.49,0,.89)` |
+| Pill switch | Pricing mode, sign up / sign in; 620 ms `cubic-bezier(.73,.49,0,.89)` (500 ms in the dashboard) |
 | Expanding cards | How it works; the open card grows to 3.2× in 700 ms ease-out, body rises in |
 | Till counter | USDC digits roll 520 ms each, 40 ms apart, as rand is typed |
 | Paid. | Word slams in 700 ms (from +40 px, 115% scale); green check pops at 450 ms |
@@ -123,6 +129,18 @@ section), Prince Akachi, Shedrack Salami, Steward Masweneng, Mpumelelo Macu, Kar
 Martins, abolova. Before launch, replace people shown next to example amounts with commissioned
 photography and model releases.
 
+### 2.8 Dashboard shell
+
+- **Desktop (over 820 px):** dark ink sidebar, 248 px: logo, nav (Overview, Requests, Payments,
+  Wallets, Settings) with line icons, active row `#221D26` with a sun-yellow icon; a protea
+  "New request" button; a Testnet card; the business name and sign-out at the bottom.
+- **Top bar:** white, 68 px: page title and kicker, search, Testnet pill, avatar.
+- **Page:** background `#F6F5F3`; cards `#FFFFFF`, 1 px `#ECE8EE` border, radius 20–24, no heavy
+  shadows. Body text 13–15 px; headline figures in Archivo 800–900, not the giant landing display.
+- **Mobile (820 px and under):** the sidebar goes; a white bottom tab bar takes over: Home,
+  Requests, a raised protea **+** in the centre (New request), Payments, More (Wallets, Settings,
+  sign out). Tables become stacked rows; dialogs become bottom sheets.
+
 ## 3. Route map
 
 | Route | Who | Purpose |
@@ -139,14 +157,14 @@ photography and model releases.
 | `/settings` | Merchant | Business, pricing (fixed rate), defaults, password |
 | `/pay/[requestId]` | **Public** | Customer payment page |
 
-The merchant area uses an **app shell**: left nav on desktop (Overview, Requests, Payments, Wallets, Settings), bottom tab bar on phones, Testnet banner on top, a "New request" button always visible.
+The merchant area uses the **dashboard shell** in §2.8: sidebar on desktop, bottom tab bar with a centre "+" on phones, Testnet always visible, "New request" always one tap away. Every "Open app" button on the landing page goes to `/overview` (or `/login` when signed out).
 
 ---
 
 ## 4. Landing page (`/`)
 
-Order: header (logo, Merchants/Customers switch that changes the hero copy and CTA, How it works,
-What's checked, FAQs, Testnet badge, Sign in, "Start for free +") → hero (two-line display headline
+Order: header (logo, How it works, What's checked, FAQs, Testnet badge, Sign in, "Open app +") →
+hero (two-line display headline
 with the rotating word; sub and CTA; 2.39:1 photo with a floating request card and a "Paid · verified
 on Stellar" pill) → marquee of business types → "Any price. Any hustle." 3D carousel of example
 requests → "No app. No account. Just pay." dark panel with a phone showing the payment page and a
@@ -159,13 +177,18 @@ counter → "Paid means paid." protea panel listing what gets checked → "Mzans
 
 ### 5.1 Sign-up and onboarding
 
-- **Sign up:** business name, email, password. Then straight into `/get-started`.
+- **Sign up / sign in:** one page with a pill switch (Create account / Sign in). Sign up asks for
+  business name, email, password, then goes straight to `/get-started`. A photo panel sits on the
+  right on desktop and is hidden on phones.
 - **Get started checklist** (each step shows done / to do):
   1. **Add your receiving wallet**: paste a `G…` address. Live hint if it looks like an `S…` secret: *"That's a secret key. Never share it. Paste the address that starts with G."* (The API refuses it too.)
   2. **Prove it's yours**: "Verify with Freighter" opens Freighter to sign a message. No funds move.
   3. **Make sure it can receive USDC**: shows account and trustline checks with a fix-it hint ("Add a USDC trustline in your wallet") and a "Check again" button.
   4. **Choose how you price** (optional): manual, or set a fixed rate.
   5. **Create your first request.**
+
+  The design shows this as two cards, **Connect your wallet** (steps 1–3 in the connect sheet from
+  §5.7) and **Set your rate** (step 4), then "Open dashboard". Each card turns green when done.
 
 ### 5.2 Overview (`/overview`)
 
@@ -244,7 +267,12 @@ Top to bottom:
 ### 5.7 Wallets (`/wallets`)
 
 - List: label, address, verified badge, account / trustline checks, "can receive USDC" yes/no with reason, "Check again".
-- Add wallet dialog (with secret-key guard), Verify with Freighter, Remove (explains that open requests keep working).
+- Wallet cards (label, short address, Verified / Takes USDC chips, "Check again").
+- **Connect a wallet** dialog (bottom sheet on phones), three steps: 1. pick Freighter, xBull or
+  "Paste an address" (with the secret-key guard); 2. sign the proof message in the wallet; 3. Randi
+  runs the account and trustline checks live, then "Use this wallet". A pasted address is verified
+  later with a wallet that can sign.
+- Remove (explains that open requests keep working).
 
 ### 5.8 Settings (`/settings`)
 
@@ -313,12 +341,16 @@ Numbered, plain steps:
 
 The QR code holds a **SEP-7** payment link (destination, amount, USDC asset, memo, Testnet passphrase), so SEP-7 wallets fill everything in. Below the QR: *"Wallet can't add a memo? Use these instead"*, showing the numeric memo ID or the muxed `M…` address.
 
-### 6.3 Pay with Freighter
+### 6.3 Pay with a wallet
 
-1. Check Freighter is installed; if not, show a link and the manual steps.
-2. Check Freighter is on **Testnet**; if not: *"Switch Freighter to Testnet, then try again."*
+"Pay with wallet" opens a sheet listing Freighter, xBull and Albedo (Stellar Wallets Kit), with
+"Pay from any other wallet" (address, amount, memo, each with Copy) underneath. The sheet closes
+only with its × button or Escape. For the wallet the customer picks:
+
+1. Check the wallet is available; if not, show a link and the manual steps.
+2. Check the wallet is on **Testnet**; if not: *"Switch your wallet to Testnet, then try again."*
 3. Check the customer's account has a USDC trustline and enough balance; show what's missing before asking them to sign.
-4. Build the payment (USDC, exact amount, memo = reference) and ask Freighter to sign.
+4. Show a review (amount, to, memo, network), build the payment (USDC, exact amount, memo = reference) and ask the wallet to sign.
 5. Submit. Show **"Sent — waiting for Stellar to confirm…"**. This is a *page* state only; the request is still Pending until the worker verifies it.
 6. If submission times out, look up the transaction by hash. **Never resubmit automatically.**
 7. If the transaction **fails**, show the reason in plain words (e.g. "Not enough USDC") with "Try again". Nothing was paid.
