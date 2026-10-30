@@ -27,7 +27,7 @@ Folder plan:
 
 ```
 apps/web/
-  DESIGN.md                 short summary of section 2 ("Clear Rand" tokens + rules)
+  DESIGN.md                 short summary of section 2 ("Specimen" tokens + rules)
   app/
     page                    landing
     (auth)/                 signup, login
