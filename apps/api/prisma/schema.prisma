@@ -1,0 +1,255 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Merchant {
+  id           String            @id @default(cuid())
+  email        String            @unique
+  passwordHash String
+  businessName String
+  emailVerifiedAt DateTime? // set once the merchant entered the code emailed at sign-up
+  emailVerification EmailVerification?
+  supportContact String? // how customers reach the business; shown on the checkout
+  defaultWalletId String? // dashboard prefill for new requests
+  defaultExpiryMinutes Int       @default(30) // dashboard prefill for new requests
+  defaultPricingMode PricingMode @default(MANUAL) // how new requests set their USDC amount
+  // The merchant's own fixed rate: ZAR per 1 USDC with 4 decimals (R18.50 = 185000). Never
+  // fetched from anywhere; empty until the merchant sets one.
+  fixedRate    BigInt?
+  rateUpdatedAt DateTime?
+  createdAt    DateTime          @default(now())
+  devices      TrustedDevice[]
+  passwordResets PasswordReset[]
+  sessions     Session[]
+  wallets      Wallet[]
+  requests     PaymentRequest[]
+  challenges   WalletChallenge[]
+}
+
+model Session {
+  id         String   @id // HMAC-SHA256 of the cookie token
+  merchantId String
+  merchant   Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  lastSeenAt DateTime @default(now()) // refreshed at most every 5 minutes
+  ip         String?
+  userAgent  String?
+
+  @@index([merchantId])
+}
+
+// A browser that has logged in successfully before. It is exempt from the account-wide
+// login lock, so an attacker hammering a merchant's email cannot lock the merchant out.
+model TrustedDevice {
+  id         String   @id // HMAC-SHA256 of the device cookie token
+  merchantId String
+  merchant   Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  lastUsedAt DateTime @default(now())
+
+  @@index([merchantId])
+}
+
+// The six-digit code emailed at sign-up. One live code per merchant; only its keyed hash is stored.
+model EmailVerification {
+  merchantId String   @id
+  merchant   Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  codeHash   String
+  expiresAt  DateTime
+  attempts   Int      @default(0) // wrong guesses against this code
+  sentAt     DateTime @default(now())
+}
+
+// One-hour, single-use password reset link. Only the keyed hash of the token is stored.
+model PasswordReset {
+  id         String    @id // HMAC-SHA256 of the token in the emailed link
+  merchantId String
+  merchant   Merchant  @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  expiresAt  DateTime
+  usedAt     DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([merchantId, createdAt])
+}
+
+// Failed-login counters, shared by every API instance.
+model LoginThrottle {
+  key         String   @id // "p:<email>|<ip>" or "e:<email>"
+  failures    Int
+  lockedUntil DateTime
+  updatedAt   DateTime @updatedAt
+}
+
+// Fixed-window counters for rate limits that must hold across API instances.
+model RateLimit {
+  key     String   @id
+  hits    Int
+  resetAt DateTime
+
+  @@index([resetAt])
+}
+
+model Wallet {
+  id            String           @id @default(cuid())
+  merchantId    String
+  merchant      Merchant         @relation(fields: [merchantId], references: [id])
+  address       String // base G address; one ACTIVE wallet per address (enforced in the wallet service)
+  label         String?
+  verifiedAt    DateTime? // set after a valid signed challenge
+  accountExists Boolean          @default(false)
+  trustlines    Json             @default("[]") // [{ code, issuer, limit, balance, buyingLiabilities, authorized }] cached from Horizon
+  checkedAt     DateTime?
+  deletedAt     DateTime? // soft delete; still watched while it has open requests
+  createdAt     DateTime         @default(now())
+  requests      PaymentRequest[]
+  payments      ChainPayment[]
+
+  @@index([merchantId])
+  @@index([address])
+}
+
+model WalletChallenge {
+  id         String    @id @default(cuid())
+  merchantId String
+  merchant   Merchant  @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  address    String
+  message    String // "Randi wallet verification\nMerchant: …\nWallet: …\nNonce: …\nExpires: …"
+  expiresAt  DateTime // 10 minutes
+  usedAt     DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([merchantId, address])
+}
+
+enum PricingMode {
+  MANUAL // merchant entered both the ZAR and the USDC amount
+  FIXED_RATE // USDC = ZAR / the merchant's fixed rate, rounded up to 0.01 USDC
+}
+
+enum RequestStatus {
+  PENDING
+  PARTIALLY_PAID
+  PAID
+  OVERPAID
+  EXPIRED
+  CANCELLED
+  FAILED
+}
+
+model PaymentRequest {
+  id              String         @id @default(cuid())
+  publicId        String         @unique // 12 random base62 chars, used in /pay/{publicId}
+  merchantId      String
+  merchant        Merchant       @relation(fields: [merchantId], references: [id])
+  walletId        String
+  wallet          Wallet         @relation(fields: [walletId], references: [id])
+  walletAddress   String // snapshot
+  assetCode       String // snapshot
+  assetIssuer     String // snapshot; Circle's testnet USDC issuer
+  zarAmountCents  BigInt // what the merchant charges, in rand; display only, never verified
+  usdcAmountStroops BigInt // what the customer must send; the only amount that is verified
+  pricingMode     PricingMode // snapshot: how usdcAmountStroops was set
+  rateSnapshot    BigInt? // FIXED_RATE: the merchant's rate at creation (ZAR per USDC, 4 decimals)
+  receivedStroops BigInt         @default(0)
+  memo            String         @unique // the payment reference: "RD" + 8 Crockford base32, stored uppercase
+  status          RequestStatus  @default(PENDING)
+  description     String?
+  customerRef     String? // merchant's own order ID
+  expiresAt       DateTime
+  paidAt          DateTime?
+  paidTxHash      String? // tx that completed the payment
+  cancelledAt     DateTime?
+  refundedAt      DateTime? // merchant recorded sending back what the request itself owed
+  refundTxHash    String?
+  idempotencyKey  String?
+  idempotencyHash String? // sha256 of the create body, to detect key reuse with a different body
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  payments        ChainPayment[]
+  events          RequestEvent[]
+
+  @@unique([merchantId, idempotencyKey])
+  @@index([merchantId, createdAt])
+  @@index([status, expiresAt])
+  @@index([walletId, status])
+}
+
+enum PaymentOutcome {
+  COUNTED // applied to the request's received amount
+  DUPLICATE // request already PAID or OVERPAID
+  LATE // ledger time after expiresAt
+  AFTER_CANCEL
+  WRONG_ASSET
+  WRONG_ISSUER // same code, different issuer (counterfeit)
+  WRONG_WALLET // memo belongs to a request on another wallet
+  NO_MEMO
+  UNKNOWN_MEMO
+  MEMO_TYPE_MISMATCH
+  AFTER_CLOSE // request FAILED (testnet reset) before this payment
+}
+
+model ChainPayment {
+  eventId          String          @id // RPC event id ("hz-…" when backfilled from Horizon)
+  txHash           String
+  innerTxHash      String?
+  ledger           Int
+  ledgerClosedAt   DateTime
+  walletId         String
+  wallet           Wallet          @relation(fields: [walletId], references: [id])
+  fromAddress      String
+  toAddress        String // base G
+  toMuxedId        String?
+  memoRaw          String?
+  memoNormalized   String?
+  memoType         String // "none" | "text" | "id" | "hash"
+  assetCode        String
+  assetIssuer      String?
+  amountStroops    BigInt
+  eventType        String // "transfer" | "mint"
+  source           String // "rpc" | "horizon"
+  requestId        String?
+  request          PaymentRequest? @relation(fields: [requestId], references: [id])
+  outcome          PaymentOutcome
+  matchedBy        String? // "memo" | "manual"; null when not tied to a request by Randi
+  linkedManually Boolean         @default(false)
+  linkedAt       DateTime?
+  refundedAt       DateTime? // merchant recorded sending this payment back
+  refundTxHash     String?
+  createdAt        DateTime        @default(now())
+
+  @@index([walletId, createdAt])
+  @@index([walletId, ledgerClosedAt])
+  @@index([requestId])
+  @@index([outcome])
+  @@index([txHash])
+}
+
+model RequestEvent {
+  id             String         @id @default(cuid())
+  requestId      String
+  request        PaymentRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  fromStatus     RequestStatus
+  toStatus       RequestStatus
+  reason         String // "created" | "payment_counted" | "expired" | "cancelled" | "network_reset"
+  actor          String // "system" | "merchant"
+  paymentEventId String?
+  createdAt      DateTime       @default(now())
+
+  @@index([requestId, createdAt])
+}
+
+model Cursor {
+  name               String    @id // "rpc-events"
+  ledger             Int // last fully processed ledger
+  pagingToken        String?
+  ledgerClosedAt     DateTime? // close time of the last fully processed ledger (used by the expiry sweeper)
+  networkPassphrase  String
+  lastNetworkResetAt DateTime?
+  updatedAt          DateTime  @updatedAt
+}
