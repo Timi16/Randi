@@ -27,7 +27,7 @@ Folder plan:
 
 ```
 apps/web/
-  DESIGN.md                 short summary of section 2 (tokens + rules)
+  DESIGN.md                 short summary of section 2 ("Clear Rand" tokens + rules)
   app/
     page                    landing
     (auth)/                 signup, login
@@ -35,8 +35,10 @@ apps/web/
       overview, requests, requests/new, requests/[id],
       payments, wallets, settings, get-started
     pay/[requestId]/        public customer payment page (own light layout)
-  components/               Logo, Icon, StatusPill, OutcomePill, AmountPair, CopyField,
-                            QrCode, TestnetBanner, Dialog, Toast, AppShell, EmptyState, Skeleton
+  components/               Logo, Icon, TestnetBanner, MerchantHeader, AmountPair, PayButton,
+                            DetailRows, CopyButton, StatusPill, OutcomeTag, PaidProof, TrustLine,
+                            Segmented, StatTile, DataTable, QrCode, Dialog, Toast, AppShell,
+                            EmptyState, Skeleton
   lib/                      api client, money formatting (string-only), live stream hook,
                             freighter helpers, SEP-7 builder, status labels
 ```
@@ -45,101 +47,112 @@ apps/web/
 
 ---
 
-## 2. Design system
+## 2. Design system: "Clear Rand"
 
-### 2.1 Direction: "Clear rand"
+Chosen 30 Oct 2026. Visual reference: the **Randi design** canvas
+(https://claude.ai/artifact/8PLRDWPvpX3ahEnSbpmp1P), which has the system board and the four key
+screens. The look borrows from three products and copies none of them:
 
-Calm, exact and trustworthy, with a quiet South African character. It should feel like a good bank
-statement, not a crypto app. Three ideas drive every screen:
+| From | What we take |
+| --- | --- |
+| **Stripe** | Navy ink on a cool light canvas, crisp white cards with hairline borders, tabular figures, calm tables |
+| **Paystack** | The checkout shape: dark header with the merchant on top, one centred card, a big green pay button, a "secured by" line at the bottom; friendly, plain copy |
+| **USDT / USDC** | Money green (Tether) for money that moved or arrived; USDC blue only on the USDC chip |
 
-1. **Two amounts, never confused.** ZAR is what the merchant charges. USDC is what the customer sends. They always appear together in the **Amount pair** component, with different labels, sizes and alignment, and the rate line underneath.
-2. **Proof, not promises.** "Paid" always comes with the transaction hash and a link to a block explorer. Nothing says Paid without it.
-3. **Testnet is never hidden.** A permanent amber banner reads *"Stellar Testnet · test money only, no real value"* on every page, merchant and customer.
+### 2.1 Three ideas behind every screen
 
-### 2.2 Colour tokens
+1. **Two amounts, never confused.** ZAR is what the merchant asks; USDC is what the customer sends. They always appear together in the **Amount pair**: ZAR small with the label "Requested", USDC large with "Send exactly" and the USDC chip, and the rate line under it.
+2. **Proof, not promises.** "Paid" always comes with the transaction hash, the time and a stellar.expert link. Nothing says Paid without it.
+3. **Testnet is never hidden.** An amber banner, *"Stellar Testnet · test money, no real value"*, sits on top of every customer page and as a chip in the merchant app bar.
+
+### 2.2 Colour
 
 | Token | Hex | Use |
 | --- | --- | --- |
-| `--green` | `#0E6B50` | Brand, primary buttons, links, focus ring |
-| `--green-hover` | `#0A5540` | Hover/pressed |
-| `--green-tint` | `#E6F2EC` | Paid fills, active nav item |
-| `--green-ink` | `#0B4A38` | Text on green tint |
-| `--ochre` | `#B7791F` | Rate chip and small accents only (never for status) |
-| `--ink` | `#111827` | Main text, dark buttons |
-| `--muted` | `#4B5563` | Secondary text |
-| `--paper` | `#F6F5F1` | Page background (warm off-white) |
+| `--ink` | `#0A2540` | Text, dark buttons |
+| `--midnight` | `#061B31` | Payment page header, landing hero, avatars |
+| `--slate` | `#425466` | Secondary text |
+| `--mist` | `#697386` | Labels, hints (passes 4.5:1 on white and canvas) |
+| `--line` | `#E3E8EE` | Borders, dividers (`#EEF1F5` between rows, `#D5DBE3` on inputs and secondary buttons) |
+| `--canvas` | `#F6F9FC` | Page background |
 | `--surface` | `#FFFFFF` | Cards |
-| `--line` | `#E4E1D9` | Borders |
-| `--line-soft` | `#EFEDE7` | Row dividers |
-| `--amber-bg` / `--amber-ink` / `--amber-line` | `#FFF6DE` / `#7A4B00` / `#F1D48A` | Testnet banner, Pending, Part-paid |
-| `--red-bg` / `--red-ink` | `#FDECEC` / `#9B1C1C` | Rejected payments, Failed, errors |
-| `--grey-bg` / `--grey-ink` | `#F0EFEB` / `#57534E` | Expired, Cancelled |
+| `--cyan` | `#0BA4DB` | Brand mark and merchant avatar fill (with ink text on it); never text on white |
+| `--indigo` | `#4B45E3` (hover `#3A34C4`) | Every merchant action, links, focus ring, active tab |
+| `--indigo-tint` | `#EEEDFD` | Selected nav item, info notes (text `#2D2899`) |
+| `--mint` | `#137A60` | The customer's pay button, "Paid" and collected amounts (text on tint `#0F6A52`) |
+| `--mint-tint` | `#E6F6F0` | Paid fills |
+| `--usdt-green` | `#26A17B` | The Paid check icon and status dots only |
+| `--usdc-blue` | `#2775CA` | USDC chip (chip fill `#EAF2FB`, text `#1D5FA8`) |
+| `--amber` | `#F5A524` | Testnet, pending, part-paid (fill `#FFF6E0`, text `#8A5300`, border `#F5D78E`) |
+| `--coral` | `#DF1B41` | Rejected, failed, errors (fill `#FDECEF`, text `#B3123A`) |
+| grey status | fill `#EEF1F5`, text `#4A5568`, dot `#8792A2` | Expired, cancelled |
 
-v1 ships **light only**. Every colour is a token, so dark mode can be added later without hunting through components. All text/background pairs meet WCAG AA contrast (4.5:1 for body text).
+Rules: indigo is for the merchant, mint green is for money. Green never appears on a merchant
+button, and indigo never appears on the customer's pay button. Light only in v1; every colour is a
+token, so dark mode can come later.
 
 ### 2.3 Type
 
-- **Manrope** (400–800) for everything. Page title 28/800, card title 17/700, body 15, small 13.
-- **JetBrains Mono** for the payment reference, addresses, hashes, request IDs and USDC figures in tables.
-- All numbers use **tabular figures** so columns line up.
+- **Inter** (400/500/600/700) for everything, with tabular figures (`font-feature-settings: 'tnum'`).
+- **JetBrains Mono** (400/500) for the payment reference, addresses, request IDs and hashes.
+- Scale: amount 40–44/700 (−0.03em) · page title 28/700 (−0.02em) · card title 20/600 · body 15/400 · small 13–14 · label 12/600 caps, +0.08em.
 
 ### 2.4 Shape and spacing
 
-- Radius: cards 14, buttons and inputs 10, pills 999 (fully round), payment card 18.
-- Controls 46 px tall; the one main action on a screen 52 px; small buttons 36 px.
-- Spacing scale 4 / 8 / 12 / 16 / 24 / 32 / 48. Page padding 16 on phones, 32 on desktop.
-- Touch targets at least 44 × 44 px.
+- Radius: payment card 18, cards 14–16, buttons and inputs 10–12, chips and pills fully round, outcome tags 6.
+- Heights: inputs and buttons 44–46, the one main action 52–54, small buttons 34–36. Touch targets ≥ 44 px.
+- Payment card shadow: `0 12px 32px rgba(10,37,64,0.10)`; everything else is flat with a 1 px border.
+- Spacing 4 / 8 / 12 / 16 / 24 / 32 / 48; page padding 16 on phones, 24–32 on desktop; content max-width 1040.
 
 ### 2.5 Money display rules
 
-- Amounts are **strings from the API** and are formatted as strings. `parseFloat`/`Number()` on amounts are banned in the web app too.
-- **ZAR:** `R` + thousands separated by commas + 2 decimals: **R1,250.00**. Always 2 decimals.
-- **USDC:** number + space + `USDC`: **27.03 USDC**. Show 2 decimals unless the amount has more significant digits (then up to 7, trailing zeros trimmed). Never round a USDC figure for display in a way that hides a stroop difference on a status screen.
-- **Rate line:** *"Rate set by {merchant}: R18.50 = 1 USDC · not a live exchange rate"*. Manual mode: *"USDC amount set by {merchant}"*.
-- The words *exchange*, *conversion*, *convert* and *live rate* are not used to describe Randi's pricing.
+- Amounts are strings from the API, formatted as strings (`parseFloat`/`Number()` banned).
+- **ZAR:** `R1,250.00`, always 2 decimals. **USDC:** `27.03` + USDC chip, 2 decimals unless more are significant (up to 7); never round away a stroop difference on a status screen.
+- **Rate line:** *"Rate set by {merchant}: R18.50 = 1 USDC. Not a live exchange rate."* Manual mode: *"USDC amount set by {merchant}."*
+- Never say *exchange*, *conversion* or *live rate* about Randi's pricing (except "not a live exchange rate").
 
-### 2.6 Status pills
+### 2.6 Status
 
-Status is **never colour alone**: every pill has an icon and a word.
+Status is never colour alone: a pill has a dot and a word.
 
-| Status | Pill | Icon |
-| --- | --- | --- |
-| Pending | Amber "Pending" | clock |
-| Part-paid | Amber "Part-paid" | half circle |
-| Paid | Green "Paid" | check |
-| Overpaid | Green "Paid · overpaid" | check + plus |
-| Expired | Grey "Expired" | hourglass |
-| Cancelled | Grey "Cancelled" | slash |
-| Failed | Red "Failed" | alert |
+| Status | Pill |
+| --- | --- |
+| Pending, Part-paid | Amber |
+| Paid, Paid · overpaid | Mint |
+| Expired, Cancelled | Grey |
+| Failed | Coral |
 
-Payment outcome pills: **Applied** (green), **Rejected** (red, with reason: wrong asset, counterfeit USDC, wrong recipient), **Not applied** (grey, with reason: late, already paid, after cancel), **Unmatched** (amber).
+Payment outcomes are square-cornered tags: **Applied** (mint), **Rejected · wrong asset / wrong
+recipient / counterfeit** (coral), **Not applied · late / already paid / after cancel** (grey),
+**Unmatched** (amber).
 
 ### 2.7 Core components
 
 | Component | What it is |
 | --- | --- |
-| `TestnetBanner` | Full-width amber strip, always on top. Not dismissable |
-| `AmountPair` | ZAR + USDC + rate line, in two layouts: *merchant* (ZAR large) and *customer* (USDC large, "Send exactly") |
-| `CopyField` | Label + monospace value + copy button with "Copied" feedback; long values truncate in the middle (`GABC…XYZ1`) with the full value available |
-| `StatusPill`, `OutcomePill` | Section 2.6 |
-| `TxHashLink` | Short hash + external-link icon to stellar.expert (Testnet) |
-| `QrCode` | SEP-7 payment link as QR, with the text link below it |
-| `Countdown` | "Expires in 24:51"; switches to a date for long expiries; never decides expiry itself (the API does) |
-| `Timeline` | The request's audit events and payments in time order |
-| `EmptyState`, `Skeleton`, `ErrorState` | Every list and card has all three |
-| `Dialog`, `Toast` | Focus-trapped dialog, closes on Escape; polite toasts |
+| `TestnetBanner` | Full-width amber strip on customer pages; amber chip in the merchant app bar. Never dismissable |
+| `MerchantHeader` | Midnight band with the merchant's initials avatar, name and "Verified wallet"; the payment card overlaps it by 52 px (Paystack pattern) |
+| `AmountPair` | Customer layout (USDC large) and merchant preview layout (same, with the "rounded up" explanation) |
+| `PayButton` | Mint, 54 px, lock icon, "Pay with Freighter" |
+| `DetailRows` | Network, asset (+ issuer), send to, reference (highlighted row), amount, each with Copy |
+| `CopyButton` | Secondary button, "Copy" → "Copied"; `aria-label` names what it copies |
+| `StatusPill`, `OutcomeTag` | §2.6 |
+| `PaidProof` | Check in a mint ring, "Paid", "Verified on Stellar Testnet", rows for requested, received, paid at, transaction, reference; "View on stellar.expert" |
+| `TrustLine` | Shield icon + "Verified on Stellar by randi" + request ID, at the bottom of every customer page |
+| `Segmented` | Grey track, white selected segment with a soft shadow; used for pricing mode and list filters |
+| `StatTile` | White card, 13 px label, 26/700 value; "Needs attention" tile has an amber border |
+| `DataTable` | Caps header row, hairline rows, money right-aligned, references and hashes in mono, hash links in indigo; scrolls sideways in its box on small screens |
+| `QrCode` | SEP-7 link as a QR in a 116 px tile, with a one-line explanation beside it |
 
 ### 2.8 Voice
 
-Plain and specific. Say what happened and what to do next.
+Plain and specific, like Paystack's: say what happened and what to do next.
 
 - ✅ "8.00 USDC is still due." · ❌ "Insufficient amount received."
 - ✅ "This payment was in XLM, so it wasn't applied. Send it back from your wallet." · ❌ "WRONG_ASSET"
 - ✅ "Paid. Verified on Stellar Testnet." · ❌ "Success!"
-- Randi never moves money, so never imply it does. Refunds: *"Send it back from your wallet, then mark it refunded here."*
-- Use "payment reference" in the UI and explain once that wallets call it a **memo**.
-
----
+- Randi never moves money: refunds are *"Send it back from your wallet, then mark it refunded here."*
+- Say "payment reference" and explain once that wallets call it the **memo**.
 
 ## 3. Route map
 
