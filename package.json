@@ -1,0 +1,23 @@
+{
+  "name": "randi",
+  "private": true,
+  "packageManager": "pnpm@12.8.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @randi/api dev",
+    "dev:worker": "pnpm --filter @randi/api dev:worker",
+    "build": "pnpm --filter @randi/api build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm --filter @randi/api test",
+    "format": "prettier --write .",
+    "db:up": "docker compose -f docker-compose.dev.yml up -d",
+    "scenario": "pnpm --filter @randi/api scenario",
+    "seed": "pnpm --filter @randi/api seed"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.0"
+  }
+}

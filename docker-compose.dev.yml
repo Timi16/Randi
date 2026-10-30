@@ -1,0 +1,19 @@
+# Local development database. Start with: pnpm db:up
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: randi
+      POSTGRES_PASSWORD: randi
+      POSTGRES_DB: randi
+    ports:
+      - "127.0.0.1:5438:5432"
+    volumes:
+      - randi-dev-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U randi -d randi"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+volumes:
+  randi-dev-pg:
