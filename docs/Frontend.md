@@ -204,6 +204,12 @@ counter → "Paid means paid." protea panel listing what gets checked → "Mzans
 - Recent requests (5) with status pills.
 - Recent payments (5) with outcome pills.
 - Empty state for new merchants points to "Create your first request".
+- **Hide amounts:** an eye button next to "Received this month". Tapping it replaces the month total,
+  the "Asked for" tile and the chart values with dots (`•••••• USDC`, `R •••••`); the chart shape
+  stays. Shown by default; the choice is remembered on that device (`localStorage`, key
+  `randi.hideAmounts`). Single request amounts, the activity feed and new-payment alerts are never
+  hidden, because the merchant needs them to serve the customer in front of them. The button has
+  `aria-pressed` and the label "Hide amounts" / "Show amounts".
 
 ### 5.3 Requests list (`/requests`)
 
