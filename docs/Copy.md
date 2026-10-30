@@ -4,7 +4,7 @@
 
 ## Voice
 
-Write like a good shopkeeper's slip: plain, exact, a little dry. The reader is a South African
+Big and warm in headlines, plain and exact in the details. The reader is a South African
 business owner who wants their money, and their customer, who may never have touched Stellar.
 
 - **Say what happens, in the order it happens.** "Send the link. Your customer pays. The page says Paid."
@@ -28,66 +28,25 @@ business owner who wants their money, and their customer, who may never have tou
 
 ## Landing page
 
-**Eyebrow** · Payment requests for South African businesses · Stellar Testnet
+Headlines are display type: two to four words a line, uppercase, ending in a full stop.
 
-**Headline** · Charge in rand. Get paid in USDC.
-
-**Sub** · Make a payment request in rand and send the link on WhatsApp. Randi watches Stellar until the
-money lands. Then the request says Paid and shows the transaction that proves it.
-
-**Buttons** · Create a test account · See what your customer sees
-
-**Hero builder** (the hero is a working request, not a picture of one)
-- Label: Try it. Type a rand amount.
-- Rate field label: Your rate (R per 1 USDC)
-- Result label: Your customer sends
-- Under it: Rounded up to the next cent, so you're never short.
-- Small print: Test money only. Nothing here moves real funds.
-
-**01 · How a request travels**
-1. **You ask in rand.** R500.00 for Order #1042.
-2. **Randi works out the USDC.** From your own rate, rounded up to the cent.
-3. **You send the link.** WhatsApp, email, or a QR code on the counter.
-4. **Your customer pays.** From any Stellar wallet, with one reference in the memo.
-5. **Randi checks the chain.** Right wallet, real USDC, right amount, before the deadline.
-6. **It says Paid, with proof.** The same transaction hash on your screen and theirs.
-
-**02 · Two amounts. Only one gets checked.**
-Your customer sees what you charge in rand and exactly how much USDC to send. Randi only ever checks
-the USDC; the rand is there so nobody has to do sums at the till.
-
-Your rate is your number. Randi doesn't fetch exchange rates, and every payment page says so.
-
-Example strip: `R500.00 ÷ R18.50 = 27.027…` → `27.03 USDC` · "Rounded up, so you're never short."
-
-**03 · What happens when a payment isn't quite right**
-Lead-in: Randi says Paid only after it reads the transaction on Stellar itself. A screenshot, a pasted
-hash or "I've paid, promise" changes nothing.
-
-| They did this | Randi does this |
+| Where | Copy |
 | --- | --- |
-| Sent XLM instead of USDC | Rejects it. Your request stays open. |
-| Sent "USDC" from a different issuer | Rejects it and flags it as counterfeit. |
-| Paid someone else's wallet | Doesn't count it for you. |
-| Sent less than asked | Marks it part-paid and shows what's still due. |
-| Paid twice | Keeps it Paid and flags the second payment for you to send back. |
-| Paid after the deadline | Marks it expired and flags the money for you to send back. |
-| Pasted a hash and said they paid | Ignores it. Only the chain counts. |
-
-**04 · Testnet, plainly**
-Randi runs on Stellar Testnet. The money is test money, so every page carries a SPECIMEN mark, the
-same thing banks print on notes that aren't worth anything. Get test USDC from Circle's faucet and
-try the whole thing end to end.
-
-**Photo captions** (credit every photo, never imply a business uses Randi)
-- Bo-Kaap, Cape Town · Photo: Anil Baki Durmus / Unsplash
-- Rosebank Sunday Market, Johannesburg · Photo: Vije Vijendranath / Unsplash
-- Bo-Kaap, Cape Town · Photo: Jean van Wyk / Unsplash
-- Bo-Kaap Museum, Cape Town · Photo: Arno Smit / Unsplash
-
-**Closing** · Make your first request in about a minute. · Button: Create a test account
-
-**Footer** · randi · Payment requests in rand, paid in USDC · Stellar Testnet only · Docs · API reference · Get test USDC
+| Headline | CHARGE IN RAND. / GET PAID *in USDC. · in seconds. · with proof.* (last words rotate) |
+| Sub (Merchants) | Send a payment request in rand on WhatsApp. Your customer pays USDC on Stellar, and Randi marks it Paid the moment the money lands, with the proof. |
+| Sub (Customers) | Got a Randi link? You'll see the rand price and the exact USDC to send. Pay from any Stellar wallet and the page flips to Paid by itself. |
+| CTA | Start for free (Merchants) · See a payment page (Customers) |
+| Hero cards | Payment request · Order #1042 · R500.00 · Send 27.03 USDC — and — Paid · verified on Stellar · tx 53b94f…67a4 |
+| Marquee | Salons ✦ Spaza shops ✦ Bakeries ✦ Market stalls ✦ Tailors ✦ Kota spots ✦ Barbers ✦ Caterers ✦ Car washes ✦ Beadwork |
+| Carousel | ANY PRICE. ANY HUSTLE. · Type it in rand. Randi works out the USDC from your own rate and rounds up to the cent, so you're never short. · Cards: Knotless braids R650.00 / 35.14 USDC · Beadwork necklace R450.00 / 24.33 · Ankara two-piece R1,200.00 / 64.87 · Sneaker clean R180.00 / 9.73 · Suit hire, one day R2,220.00 / 120.00 · Festival face paint R120.00 / 6.49 · Kota and chips R85.00 / 4.60 (each tagged "Example") |
+| Customer panel | NO APP. NO ACCOUNT. JUST PAY. · They open your link, see the rand price and the exact USDC to send, and pay from any Stellar wallet. One tap with Freighter. The page flips to Paid by itself. |
+| How it works | FOUR STEPS. ZERO SUMS. · 01 Ask in rand · 02 Send the link · 03 They pay USDC · 04 Paid, with proof (bodies as on the canvas) |
+| Two amounts | TWO AMOUNTS. ONE GETS CHECKED. · Badge: Your rate, not a live exchange rate · Your customer sees the rand price and exactly how much USDC to send. Randi only ever checks the USDC. The rand is there so nobody has to do sums at the till. |
+| What's checked | PAID MEANS PAID. · Randi only says Paid after it reads the transaction on Stellar itself. A screenshot or a pasted hash changes nothing. · Rows: Exact USDC, right wallet → Paid · Paid less than asked → Part-paid · Sent XLM, not USDC → Rejected · Fake "USDC" from another issuer → Rejected · Paid the same request twice → Flagged to send back · Pasted a hash, said they paid → Ignored |
+| Photo grid | MZANSI GETS PAID. (every tile credited) |
+| FAQs | Is this real money? · Where does the rand price come from? · Does my customer need an account? · What if they pay the wrong amount? · How quickly does it say Paid? · Does Randi hold my money? (answers as on the canvas) |
+| Closing | START CHARGING IN RAND. · Create a free test account · Stellar Testnet only. Test money, no real value. |
+| Footer | randi. · Product / Build / Testnet columns · Payment requests in rand, paid in USDC. Stellar Testnet only; no real money moves. · Photos via Unsplash, credited where shown. |
 
 ## Customer payment page
 

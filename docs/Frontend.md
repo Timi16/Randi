@@ -27,7 +27,7 @@ Folder plan:
 
 ```
 apps/web/
-  DESIGN.md                 short summary of section 2 ("Specimen" tokens + rules)
+  DESIGN.md                 short summary of section 2 (v3 tokens + rules)
   app/
     page                    landing
     (auth)/                 signup, login
@@ -47,118 +47,81 @@ apps/web/
 
 ---
 
-## 2. Design system: "Specimen"
+## 2. Design system (v3)
 
-Chosen 30 Oct 2026, replacing the first "Clear Rand" pass. Visual reference: the **Randi design**
-canvas (https://claude.ai/artifact/8PLRDWPvpX3ahEnSbpmp1P): system board, logo, motion (playable),
-landing page (working hero) and the four key screens. Words: [Copy.md](Copy.md).
+Chosen 30 Oct 2026 after the "Specimen" pass was rejected. Pattern and motion follow the
+reference site the client chose (stitch.me): giant black uppercase headlines that move, editorial
+photography of real people in bold colour, very round surfaces, pill buttons, a 3D card carousel, a
+marquee, expanding cards, and a page that lifts off a dark footer. The brand, colours, type, copy
+and photos are Randi's own; nothing is copied from the reference.
 
-### 2.1 The concept
+Visual reference: the **Randi design** canvas (https://claude.ai/artifact/8PLRDWPvpX3ahEnSbpmp1P):
+landing page (press Play), system, logo, motion and the four product screens.
 
-A Randi request is designed like an engraved banknote: guilloché line-work, a denomination in rand,
-and a reference printed like a serial number. While Randi runs on Testnet, every request carries the
-**SPECIMEN** overprint and a **security thread** that reads *STELLAR TESTNET · SPECIMEN · NO REAL
-VALUE*. Banks print SPECIMEN on notes with no value; that is exactly what Testnet money is, so the
-network warning is part of the object instead of a banner bolted on.
+### 2.1 Rules that are not style
 
-Structural, not skeuomorphic: line-work, overprints, serials, perforations and double rules. Never
-paper textures, fake holograms, gradients or copies of real rand notes (no portraits, animals or
-Reserve Bank marks).
+1. **Green means USDC arrived.** `--paid` only on Paid, Overpaid and received totals.
+2. **ZAR is asked, USDC is sent.** Both always shown; on the payer's page USDC is the giant figure.
+3. **Testnet is always on screen.** Sun-yellow "Stellar Testnet" badge in every header and a yellow strip on every payment page, plus "test money, no real value" near the pay button.
+4. **No state the backend lacks.** Pending, Part-paid, Paid, Overpaid, Expired, Cancelled, Failed. "Paid." only after the worker verifies.
+5. **People photos are credited and labelled "Example"** wherever they sit next to an amount. Unsplash photos come without model releases, so they never imply that a pictured person uses Randi.
 
-### 2.2 Rules that are not style
-
-1. **Green means USDC arrived.** Paid, overpaid and received totals. Never a button, icon, badge or tick.
-2. **ZAR is asked, USDC is sent.** Rand is the denomination (Bodoni, corner); USDC is the instruction (Plex Mono, the largest figure on the payer's page) and the only amount checked. Never show one without the other.
-3. **Testnet wears the overprint.** Thread and SPECIMEN on every surface that shows a request; the merchant app bar carries a TESTNET · SPECIMEN tag. Removed only on mainnet.
-4. **Amounts and references are mono.** IBM Plex Mono, tabular figures, decimals quieter, never rounded for display, never parsed to a float. References display grouped (`RD 7K2M 9QXA`) and copy ungrouped (`RD7K2M9QXA`).
-5. **No state the backend lacks.** Pending, Part-paid, Paid, Overpaid, Expired, Cancelled, Failed. "Sent, waiting for Stellar…" is the page's own state and never says Paid.
-
-### 2.3 Colour
-
-Palette shape: stock 66 · intaglio 22 · protea 7 · specimen 3 · paid 2. Deliberately uneven.
+### 2.2 Colour
 
 | Token | Hex | Use |
 | --- | --- | --- |
-| `--stock` | `#EEF0F3` | Page, like security paper |
-| `--note` | `#FBFBFC` | Cards, fields, the note |
-| `--engrave` | `#C9CCD8` | Line-work, hairlines (`#E1E3EA` between rows, `#DADDE8` for guilloché) |
-| `--border` | `#7E8299` | Inputs, secondary buttons (3.4:1) |
-| `--intaglio` | `#171A33` | Text, the customer's pay button, headers, the note's outer rule |
-| `--intaglio-2` | `#464A63` | Secondary text |
-| `--intaglio-3` | `#646880` | Labels (lightest text allowed, 4.6:1 on stock) |
-| `--protea` | `#A1205A` (hover `#861A4B`, tint `#F7E6EE`) | The merchant's one action per view, links, focus, the reference |
-| `--specimen` | `#9A4D00` (overprint at 10–13% alpha) | Thread, overprint, TESTNET tag |
-| `--paid` | `#0D7A4F` (text `#0A6440`, tint `#E2F2EA`) | USDC arrived. Nothing else |
-| `--void` | `#B42318` (text `#9A1E14`, tint `#FCE9E7`) | Rejected, failed, errors |
-| `--usdc` | `#2775CA` (chip `#E6EFFA`, text `#1D5FA8`) | The asset chip only |
-| pending | fill `#FFF4E5`, text `#7A3D00`, line `#EBC48F` | Pending, part-paid, needs attention |
+| `--ink` | `#0E0B10` | Text, dark sections, footer, secondary buttons |
+| `--protea` | `#D0216A` (hover `#B11A59`) | The main action, accents, the rotating headline word |
+| `--sun` | `#FFD13B` | Badges, highlights, Testnet, the "+" chip on dark buttons |
+| `--sand` | `#F4F2EF` | Cards, fields, soft sections |
+| `--paper` | `#FFFFFF` | Page |
+| `--muted` | `#6B6470` / body `#3B3640` / on dark `#CFC9D3` | Secondary text |
+| `--line` | `#E7E3E9` (inputs `#CFC9D3`) | Dividers, field borders |
+| `--paid` | `#12A150` (text `#0E8A44`) | USDC arrived. Nothing else |
+| `--usdc` | `#2775CA` | The USDC chip |
 
-The customer's pay button is intaglio, not green: it moves money but isn't money yet.
+### 2.3 Type
 
-### 2.4 Type
+**Archivo** for everything (Google Fonts, variable width and weight). Display: weight 900,
+`font-stretch: 108%`, uppercase, letter-spacing −0.055em, line-height 0.84, 44–152 px. Body: 400–500
+at 15–19 px, sentence case. **JetBrains Mono** for references, addresses and hashes.
 
-| Role | Face | Where |
-| --- | --- | --- |
-| Display + denominations | **Bodoni Moda** (600–800, italic for headlines) | Headlines, the wordmark, rand amounts (`R` raised at half size) |
-| Interface | **Hanken Grotesk** (400–700) | Everything else |
-| Figures | **IBM Plex Mono** (400–600) | Every USDC amount, reference, address, hash, label caps |
+### 2.4 Shape
 
-Never Inter, Roboto or system-ui as the rendered face. Labels: Plex Mono 11–12 px, caps, +0.14em,
-`--intaglio-3`. Amounts: integer at full weight, decimals at 0.72em in `--intaglio-2`.
+Radius 12 (inputs) · 16–24 (cards, rows) · 28–40 (sections, photos, phone) · pill (buttons, tags,
+switches). Buttons are pills with a round "+" or arrow chip at the right that turns 90° on hover.
+Sections are rounded panels inset 12–24 px from the page edge; the main page has 48 px bottom
+corners and lifts off the ink footer.
 
-### 2.5 Components
+### 2.5 Motion
 
-| Component | What it is |
+| Moment | Spec |
 | --- | --- |
-| `Thread` | 22 px specimen band of repeated microprint, top of every customer page and the landing page |
-| `Note` | Double-ruled card (1 px intaglio outer, 1 px engrave inner, 8–10 px gap) with guilloché, denomination, instruction, serial reference, SPECIMEN overprint |
-| `Denomination` | Bodoni rand amount, `R` raised; label "Requested" |
-| `Instruction` | "Send exactly" + Plex Mono USDC + USDC chip + rate line |
-| `GuardButton` | The pay button never shows a bare disabled state: it renders the first blocker as its label ("Switch Freighter to Testnet to pay"), dashed specimen border |
-| `ReferenceRow` | Protea-tinted row, serial-grouped reference, "put this in the memo", Copy copies the exact string |
-| `Perforation` | Paid as a 19×7 dot matrix punched in `--paid`; with the tx hash under it |
-| `Receipt` | Hairline rows, double `--paid` rule above "Received" |
-| `StatusTag` | Mono caps, 3 px radius, dot + word, coloured border |
-| `StatGrid` | Ruled cells; rand in Bodoni, USDC in Plex; "Needs attention" cell in pending fill |
-| `MerchantHeader` | Intaglio band with wave line-work, initials disc in stock, name, "Verified wallet"; the note overlaps it |
+| Headline word swap | "Get paid in USDC. / in seconds. / with proof." every 2.2 s, 900 ms, `cubic-bezier(1,.02,0,.85)` |
+| Hero entrance | Headline rises 900 ms; request card floats in at 500 ms; Paid pill pops at 1.2 s; both then float ±14 px, 5–6 s, alternate |
+| Marquee | Business types ("Salons ✦ Spaza shops ✦ Bakeries…"), 38 s linear loop |
+| 3D card carousel | Example requests on photo cards; every 3.2 s, 1500 ms `cubic-bezier(.87,.12,.11,.88)`, perspective 1800 px, ±16° turn |
+| Pill switch | Merchants / Customers and pricing mode; 620 ms `cubic-bezier(.73,.49,0,.89)` |
+| Expanding cards | How it works; the open card grows to 3.2× in 700 ms ease-out, body rises in |
+| Till counter | USDC digits roll 520 ms each, 40 ms apart, as rand is typed |
+| Paid. | Word slams in 700 ms (from +40 px, 115% scale); green check pops at 450 ms |
+| Everything else | `cubic-bezier(.22,1,.36,1)`, 120–450 ms; photos zoom 6% on hover |
+
+`prefers-reduced-motion`: loops stop, swaps are instant, entrances show the end state.
 
 ### 2.6 Logo
 
-A guilloché rosette (one continuous hypotrochoid line, nine lobes, one per province) engraved around
-a Bodoni **R** on a stock disc, beside the lowercase Bodoni wordmark **randi** (600, −3.5%). Sizes:
-full rosette ≥ 96 px, single line at 48, ring at 32, bare R at 16 (favicon). Intaglio and stock only:
-never green, never gradient, never on a photo without its disc.
+Lowercase **randi.** in Archivo 900, tracked −7%, ending in a full stop in protea (on light) or sun
+(on dark): the deal is done. App mark: an ink rounded square with a white **r** and a sun-yellow dot;
+the dot drops under 24 px.
 
-### 2.7 Motion
+### 2.7 Photography
 
-Five moments move; everything else is a 120 ms ease-out on hover. Transform and opacity only, no
-loops, no bounce, no parallax. Ease-out `cubic-bezier(.2,.8,.2,1)`.
-
-| Moment | What | Timing | Reduced motion |
-| --- | --- | --- | --- |
-| The engrave | Page load: the note's rosette draws itself, then the denomination rises | 1100 ms draw, 260 ms rise | Shown at once |
-| The till counter (signature) | As rand is typed, each USDC digit rolls like a till counter | 420 ms per digit, 35 ms apart from the right | Instant swap |
-| The send | After Freighter submits: a hairline fills once over one ledger (6 s) and holds | 6000 ms linear | Static "Sent" |
-| The punch | Paid perforates column by column, then the proof line rises | 160 ms per hole, 14 ms per column, 220 ms rise | Shown at once |
-| Money arriving | Dashboard total counts up; the paid row slides in with a mint wash | 600 ms count, 240 ms slide, 1.4 s wash | New values appear |
-
-### 2.8 Imagery
-
-Real South African places, openly licensed, always credited in a caption, never implying a
-pictured business uses Randi. Used on the landing page only; product screens stay photo-free.
-
-| Photo | Credit |
-| --- | --- |
-| Bo-Kaap street under Devil's Peak (hero band) | Anil Baki Durmus / Unsplash |
-| Rosebank Sunday Market stall, Johannesburg | Vije Vijendranath / Unsplash |
-| Crossing a Bo-Kaap street | Jean van Wyk / Unsplash |
-| Blue sedan at the Bo-Kaap Museum (Testnet section) | Arno Smit / Unsplash |
-
-No stock "happy merchant" photos, illustrated people, 3D coins or crypto imagery.
-
-### 2.9 Voice
-
-See [Copy.md](Copy.md): plain, exact, a little dry; South African English; real amounts always.
+Editorial portraits of real people against bold colour, plus South African street life. All from
+Unsplash under the Unsplash License, credited on the image. Current set: Ahmed Nasiru (hero and phone
+section), Prince Akachi, Shedrack Salami, Steward Masweneng, Mpumelelo Macu, Karabo Mdluli, Dion
+Martins, abolova. Before launch, replace people shown next to example amounts with commissioned
+photography and model releases.
 
 ## 3. Route map
 
@@ -182,13 +145,15 @@ The merchant area uses an **app shell**: left nav on desktop (Overview, Requests
 
 ## 4. Landing page (`/`)
 
-Copy in [Copy.md](Copy.md). Order: thread → header (logo, How it works, What's checked, Testnet, Sign
-in, Create a test account) → **hero**: headline left, a working specimen note right (type rand and a
-rate; USDC rolls on the till counter; rounded up in integer maths, the same rule as the API) → Bo-Kaap
-photo band → 01 How a request travels (six ruled steps) → photo pair → 02 Two amounts (worked
-division with a double rule) → 03 When a payment isn't quite right (what they did / what Randi does)
-→ 04 Testnet, plainly (intaglio band, SPECIMEN, photo) → closing CTA → footer. No stats, logos or
-testimonials until they are real.
+Order: header (logo, Merchants/Customers switch that changes the hero copy and CTA, How it works,
+What's checked, FAQs, Testnet badge, Sign in, "Start for free +") → hero (two-line display headline
+with the rotating word; sub and CTA; 2.39:1 photo with a floating request card and a "Paid · verified
+on Stellar" pill) → marquee of business types → "Any price. Any hustle." 3D carousel of example
+requests → "No app. No account. Just pay." dark panel with a phone showing the payment page and a
+photo → "Four steps. Zero sums." expanding cards → "Two amounts. One gets checked." with the till
+counter → "Paid means paid." protea panel listing what gets checked → "Mzansi gets paid." photo grid
+→ FAQs accordion → "Start charging in rand." → ink footer with the giant wordmark. Copy in
+[Copy.md](Copy.md). No partner logos, stats or testimonials until they are real.
 
 ## 5. Merchant screens
 
