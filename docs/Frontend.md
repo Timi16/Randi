@@ -117,9 +117,14 @@ corners and lifts off the ink footer.
 
 ### 2.6 Logo
 
-Lowercase **randi.** in Archivo 900, tracked −7%, ending in a full stop in protea (on light) or sun
-(on dark): the deal is done. App mark: an ink rounded square with a white **r** and a sun-yellow dot;
-the dot drops under 24 px.
+**Mark:** a geometric **R** drawn on a 120-unit grid: a 20-unit stem, a coin for the bowl (radius 19,
+the USDC that lands) and a 20-unit leg. A 6-unit cut in the background colour separates the coin
+from the stem and leg (8 units under 32 px). The R is the rand; the coin is the USDC. App icon: ink
+rounded square (radius 30/120), white R, sun coin. Ship it as one SVG; never set the R in a font.
+
+**Wordmark:** lowercase **randi** in Archivo 900, width 105%, tracked −3.5%, with the dot of the i
+replaced by the same coin. Coin colour: sun on dark, protea on light; never green, because green means
+Paid. Lockup gap is half the mark's width. Full sheet on the Logo board of the design canvas.
 
 ### 2.7 Photography
 
@@ -164,9 +169,12 @@ The merchant area uses the **dashboard shell** in §2.8: sidebar on desktop, bot
 ## 4. Landing page (`/`)
 
 Order: header (logo, How it works, What's checked, FAQs, Testnet badge, Sign in, "Open app +") →
-hero (two-line display headline
-with the rotating word; sub and CTA; 2.39:1 photo with a floating request card and a "Paid · verified
-on Stellar" pill) → marquee of business types → "Any price. Any hustle." 3D carousel of example
+hero: one ink panel, split in two. Left: "New" tag line, four-line
+display headline ("Charge / in rand. / Get paid / *in USDC.*", last line rotates in sun), sub, "Open
+app +" and "See a payment page", and three facts (~10 s to Paid · your rate · your wallet). Right:
+the photo with a live payment card on top that loops waiting → payment seen → Paid · verified on
+Stellar, and a "+27.03 USDC received" note that drops in on Paid. On phones the photo stacks under
+the text → marquee of business types → "Any price. Any hustle." 3D carousel of example
 requests → "No app. No account. Just pay." dark panel with a phone showing the payment page and a
 photo → "Four steps. Zero sums." expanding cards → "Two amounts. One gets checked." with the till
 counter → "Paid means paid." protea panel listing what gets checked → "Mzansi gets paid." photo grid
