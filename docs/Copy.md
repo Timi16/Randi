@@ -63,7 +63,7 @@ Headlines are display type: two to four words a line, uppercase, ending in a ful
 | Rate line (manual) | USDC amount set by Thandi's Bakery. |
 | Waiting | Waiting for your payment · Expires in 24:51 |
 | Watching line | Randi checks Stellar every few seconds. Keep this page open. |
-| Pay button | Pay with wallet (sheet: Freighter · xBull · Albedo · Pay from any other wallet) |
+| Pay button | Pay 27.03 USDC with a wallet (sheet: Freighter · xBull · Albedo · Pay from any other wallet instead) |
 | Guard: no extension | Install a Stellar wallet such as Freighter to pay in one tap, or use the details below |
 | Guard: wrong network | Switch your wallet to Testnet to pay |
 | Guard: no trustline | Your wallet needs a USDC trustline first |

@@ -29,11 +29,12 @@ Backend design comes from PayLink (`~/Documents/Paylink`); PayBridge is unrelate
 - `apps/api/src/lib/pricing.ts`: ZAR → USDC (manual or the merchant's fixed rate, rounded up to 0.01 USDC).
 - `packages/shared`: Zod schemas, amount/ZAR/rate helpers and types shared with the (future) web app.
 - `apps/api/scripts`: `scenario.ts` (Testnet end-to-end, writes `docs/Evidence.md`), `evidence.ts`, `seed.ts`.
-- `apps/web`: not built yet; see `docs/Frontend.md`.
+- `apps/web`: Next.js app (landing, `(auth)`, `(app)` dashboard, public `pay/[requestId]`); see `docs/Frontend.md` and `apps/web/DESIGN.md`. `e2e/walkthrough.mjs` drives it on Testnet.
 - Layering: routes → service → repo. Repos that touch merchant data take `merchantId` first.
 
 ## Commands
 
 `pnpm db:up` (Postgres on 5438) · `pnpm --filter @randi/api db:deploy` · `pnpm dev` (API on 4300) ·
 `pnpm dev:worker` · `pnpm lint` · `pnpm typecheck` · `pnpm test` (needs Docker for Testcontainers) ·
-`pnpm scenario` · `pnpm seed` · `pnpm --filter @randi/api openapi`
+`pnpm scenario` · `pnpm seed` · `pnpm --filter @randi/api openapi` · `pnpm dev:web` (web on 3000) ·
+`pnpm build:web` · `pnpm e2e` (needs API, worker and web running)

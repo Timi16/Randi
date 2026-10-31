@@ -10,8 +10,9 @@ duplicates and late payments are recognised and shown, never silently counted.
 Randi never converts currencies (the ZAR amount is display only), never holds a secret key and
 never moves funds.
 
-The spec lives in [docs/](docs/). `apps/api` is the backend (API + worker). The web app is planned in
-[docs/Frontend.md](docs/Frontend.md) and not built yet.
+The spec lives in [docs/](docs/). `apps/api` is the backend (API + worker). `apps/web` is the
+Next.js app: landing page, merchant dashboard and the public payment page
+([docs/Frontend.md](docs/Frontend.md)).
 
 ## Run it locally
 
@@ -24,6 +25,7 @@ pnpm db:up                      # Postgres 16 on localhost:5438
 pnpm --filter @randi/api db:deploy
 pnpm dev                        # API on :4300  (reference at /docs)
 pnpm dev:worker                 # ingestion, reconciliation, watchdog, expiry sweeper
+pnpm dev:web                    # web app on :3000 (talks to the API on :4300)
 pnpm seed                       # optional demo data: demo@randi.test / demo-password-123
 ```
 
@@ -31,6 +33,7 @@ pnpm seed                       # optional demo data: demo@randi.test / demo-pas
 
 ```sh
 pnpm lint && pnpm typecheck && pnpm test   # tests run against a real Postgres (Testcontainers)
+pnpm e2e                                   # browser walkthrough on Testnet: sign up -> request -> customer pays -> Paid
 ```
 
 ## Testnet demo and evidence

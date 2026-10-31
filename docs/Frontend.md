@@ -19,9 +19,9 @@ The frontend **never decides** whether something is paid. It shows what the API 
 | Styling | Plain CSS with design tokens (CSS variables) in one global stylesheet, plus small component classes. No UI kit |
 | Data | Typed fetch client built on the shared Zod schemas (`packages/shared`); cookies sent with requests |
 | Live status | Server-Sent Events, with polling every 5 s as fallback |
-| Wallet | Stellar Wallets Kit: Freighter (default), xBull, Albedo. Sign message for wallet proof (Freighter, or any kit wallet that supports SEP-53); sign + submit payment on the payment page |
+| Wallet | Stellar Wallets Kit modules, loaded only when used: Freighter (the kit's Varial module), xBull, Albedo. Wallet proof is a SEP-53 signed message, so only Freighter and xBull can prove a wallet (Albedo can't sign messages); all three can pay on the payment page |
 | QR codes | A small QR library rendering the SEP-7 payment link |
-| Tests | Component tests (Vitest + Testing Library) and end-to-end (Playwright) |
+| Tests | Unit tests of `lib/` (Vitest) and an end-to-end walkthrough on Testnet (`e2e/walkthrough.mjs`, Playwright) |
 
 Folder plan:
 
@@ -402,7 +402,7 @@ only with its × button or Escape. For the wallet the customer picks:
 
 ## 8. Accessibility and responsive rules
 
-- Real `<button>`, `<a>`, `<label for>` everywhere; visible focus ring (green, 2 px offset).
+- Real `<button>`, `<a>`, `<label for>` everywhere; visible focus ring (protea, 2 px offset; green stays reserved for Paid).
 - Dialogs trap focus, return focus on close, close on Escape.
 - Every list has loading, empty and error states.
 - Status never shown by colour alone (icon + word).
@@ -432,3 +432,10 @@ Named by ID like the backend ones; end-to-end tests run against a local API with
 | F11 | Testnet banner | Present on every route |
 | F12 | Merchant B opens Merchant A's request URL | Not found |
 | F13 | Payment page is opened by someone not logged in | Works fully; no merchant data beyond the allowed fields |
+
+`pnpm e2e` covers F1, F2, F8, F9, F10, F11, F12 and F13 against a local API and worker with a real
+Testnet payment (unit tests cover F9 too). A headless browser can't load a wallet extension, so the
+walkthrough proves wallet ownership with the same SEP-53 signature through the API and sends the
+customer's payment from Node. F3–F7 (stream blocked, wallet on Mainnet, no trustline, submit
+timeout, closed requests) are handled in the code (`useCheckout`, `lib/wallets.ts`,
+`lib/stellar-pay.ts`) but not yet automated.
