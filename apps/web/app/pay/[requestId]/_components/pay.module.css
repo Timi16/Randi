@@ -1,0 +1,523 @@
+/* The customer payment page: mobile first (360 px), a centred card up to 480 px. */
+
+.page {
+  min-height: 100vh;
+  background: var(--sand);
+  display: flex;
+  flex-direction: column;
+}
+
+.testnet {
+  background: var(--sun);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  padding: 9px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.testnet::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.wrap {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px 14px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 28px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 30px 60px -40px rgba(14, 11, 16, 0.35);
+  animation: rd-in 450ms var(--ease) both;
+}
+
+.merchant {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.merchantName {
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.verified {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--paid-fg);
+}
+
+.amounts {
+  background: var(--ink);
+  color: #fff;
+  border-radius: 22px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.amountsTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  padding-bottom: 12px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--ink-3);
+  font-size: 14px;
+  color: var(--on-dark-2);
+}
+
+.zar {
+  font-weight: 900;
+  font-size: 22px;
+  color: #fff;
+  letter-spacing: -0.03em;
+}
+
+.sendLabel {
+  font-size: 13px;
+  color: var(--on-dark-2);
+}
+
+.usdc {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.usdcFigure {
+  font-weight: 900;
+  font-size: clamp(44px, 14vw, 56px);
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.usdcUnit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--sun);
+}
+
+.usdcDot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--usdc);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rate {
+  font-size: 12px;
+  color: var(--on-dark-2);
+  margin-top: 4px;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.statusDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #e0a800;
+  animation: pulse 1.2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.payBtn {
+  height: 58px;
+  border: 0;
+  border-radius: 18px;
+  background: var(--protea);
+  color: #fff;
+  font-weight: 800;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px 0 22px;
+  cursor: pointer;
+  width: 100%;
+  transition: background 160ms;
+}
+
+.payBtn:hover {
+  background: var(--protea-deep);
+}
+
+.payBtnChip {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.18);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.manualToggle {
+  height: 50px;
+  border-radius: 16px;
+  border: 1.5px solid var(--line-2);
+  background: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.manual {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: rd-in 350ms var(--ease) both;
+}
+
+.steps {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-2);
+}
+
+.detailRows {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 2px 14px;
+}
+
+.detailRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--row);
+}
+
+.detailRow:last-child {
+  border-bottom: 0;
+}
+
+.detailLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.detailValue {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.memo {
+  background: var(--sun-soft);
+  border: 1.5px solid #e0a800;
+  border-radius: 16px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.memoValue {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.disclosure summary {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.disclosure summary::-webkit-details-marker {
+  display: none;
+}
+
+.disclosure[open] summary {
+  margin-bottom: 10px;
+}
+
+.sending {
+  background: var(--sand);
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bar {
+  height: 6px;
+  border-radius: 99px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  width: 100%;
+  background: var(--ink);
+  border-radius: 99px;
+  transform-origin: left;
+  animation: fill 8s var(--ease) both;
+}
+
+@keyframes fill {
+  from {
+    transform: scaleX(0.05);
+  }
+  to {
+    transform: scaleX(0.92);
+  }
+}
+
+.foot {
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 8px;
+}
+
+/* ---------- Paid ---------- */
+
+.paid {
+  background: var(--paid);
+  color: #fff;
+  border-radius: 28px;
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: rd-in 450ms var(--ease) both;
+}
+
+.paidHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.paidWord {
+  font-weight: 900;
+  font-stretch: 108%;
+  text-transform: uppercase;
+  font-size: clamp(64px, 22vw, 88px);
+  letter-spacing: -0.06em;
+  line-height: 0.85;
+  animation: slam 600ms var(--ease) both;
+}
+
+.paidCheck {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: pop 500ms var(--ease) 200ms both;
+  flex-shrink: 0;
+}
+
+@keyframes slam {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(1.12);
+  }
+}
+
+.receipt {
+  background: #fff;
+  color: var(--text);
+  border-radius: 20px;
+  padding: 4px 16px;
+}
+
+.receiptRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--row);
+  font-size: 14px;
+}
+
+.receiptRow:last-child {
+  border-bottom: 0;
+}
+
+/* ---------- Wallet sheet ---------- */
+
+.walletOpt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 200ms;
+}
+
+.walletOpt:hover:not(:disabled) {
+  border-color: var(--ink);
+}
+
+.walletOpt:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.walletIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--row);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.walletIcon img {
+  width: 28px;
+  height: 28px;
+}
+
+.review {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 2px 14px;
+}
+
+.sendTotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 16px;
+  padding: 14px 16px;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 18px 0;
+}
+
+.bigSpinner {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 4px solid var(--line);
+  border-top-color: var(--protea);
+  animation: spin 0.8s linear infinite;
+}
+
+/* Keyframes used above, defined here so CSS-module scoping can't break them. */
+@keyframes rd-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes pulse {
+  50% {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+}
+
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  70% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
