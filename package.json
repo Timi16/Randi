@@ -21,6 +21,6 @@
     "e2e": "pnpm --filter @randi/web e2e"
   },
   "devDependencies": {
-    "prettier": "^3.3.0"
+    "prettier": "^3.9.10"
   }
 }
