@@ -8,14 +8,17 @@
   "scripts": {
     "dev": "pnpm --filter @randi/api dev",
     "dev:worker": "pnpm --filter @randi/api dev:worker",
+    "dev:web": "pnpm --filter @randi/web dev",
     "build": "pnpm --filter @randi/api build",
+    "build:web": "pnpm --filter @randi/web build",
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck",
-    "test": "pnpm --filter @randi/api test",
+    "test": "pnpm -r test",
     "format": "prettier --write .",
     "db:up": "docker compose -f docker-compose.dev.yml up -d",
     "scenario": "pnpm --filter @randi/api scenario",
-    "seed": "pnpm --filter @randi/api seed"
+    "seed": "pnpm --filter @randi/api seed",
+    "e2e": "pnpm --filter @randi/web e2e"
   },
   "devDependencies": {
     "prettier": "^3.3.0"
