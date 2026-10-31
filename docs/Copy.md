@@ -40,15 +40,15 @@ Headlines are display type: two to four words a line, uppercase, ending in a ful
 | Hero card states | Waiting for payment · Expires in 29:41 → Payment seen · Checking it on Stellar… → Paid · verified on Stellar · tx 53b94f…67a4; note: +27.03 USDC received · Your wallet · just now |
 | Hero cards | Payment request · Order #1042 · R500.00 · Send 27.03 USDC — and — Paid · verified on Stellar · tx 53b94f…67a4 |
 | Marquee | Salons ✦ Spaza shops ✦ Bakeries ✦ Market stalls ✦ Tailors ✦ Kota spots ✦ Barbers ✦ Caterers ✦ Car washes ✦ Beadwork |
-| Carousel | ANY PRICE. ANY HUSTLE. · Type it in rand. Randi works out the USDC from your own rate and rounds up to the cent, so you're never short. · Cards: Knotless braids R650.00 / 35.14 USDC · Beadwork necklace R450.00 / 24.33 · Ankara two-piece R1,200.00 / 64.87 · Sneaker clean R180.00 / 9.73 · Suit hire, one day R2,220.00 / 120.00 · Festival face paint R120.00 / 6.49 · Kota and chips R85.00 / 4.60 (each with its photographer credit) |
+| Carousel | ANY PRICE. ANY HUSTLE. · Type it in rand. Randi works out the USDC from your own rate and rounds up to the cent, so you're never short. · Cards: Knotless braids R650.00 / 35.14 USDC · Beadwork necklace R450.00 / 24.33 · Ankara two-piece R1,200.00 / 64.87 · Sneaker clean R180.00 / 9.73 · Suit hire, one day R2,220.00 / 120.00 · Festival face paint R120.00 / 6.49 · Kota and chips R85.00 / 4.60 (photos only, no tags) |
 | Customer panel | NO APP. NO ACCOUNT. JUST PAY. · They open your link, see the rand price and the exact USDC to send, and pay from any Stellar wallet. One tap with Freighter, xBull or Albedo. The page flips to Paid by itself. |
 | How it works | FOUR STEPS. ZERO SUMS. · 01 Ask in rand · 02 Send the link · 03 They pay USDC · 04 Paid, with proof (bodies as on the canvas) |
 | Two amounts | TWO AMOUNTS. ONE GETS CHECKED. · Badge: Your rate, not a live exchange rate · Your customer sees the rand price and exactly how much USDC to send. Randi only ever checks the USDC. The rand is there so nobody has to do sums at the till. |
 | What's checked | PAID MEANS PAID. · Randi only says Paid after it reads the transaction on Stellar itself. A screenshot or a pasted hash changes nothing. · Rows: Exact USDC, right wallet → Paid · Paid less than asked → Part-paid · Sent XLM, not USDC → Rejected · Fake "USDC" from another issuer → Rejected · Paid the same request twice → Flagged to send back · Pasted a hash, said they paid → Ignored |
-| Photo grid | MZANSI GETS PAID. (every tile credited) |
+| Photo grid | MZANSI GETS PAID. (photos only, no tags) |
 | FAQs | Is this real money? · Where does the rand price come from? · Does my customer need an account? · What if they pay the wrong amount? · How quickly does it say Paid? · Does Randi hold my money? (answers as on the canvas) |
 | Closing | START CHARGING IN RAND. · Create a free test account · Stellar Testnet only. Test money, no real value. |
-| Footer | randi. · Product / Build / Testnet columns · Payment requests in rand, paid in USDC. Stellar Testnet only; no real money moves. · Photos via Unsplash, credited where shown. |
+| Footer | randi. · Product / Build / Testnet columns · Payment requests in rand, paid in USDC. Stellar Testnet only; no real money moves. · |
 
 ## Customer payment page
 

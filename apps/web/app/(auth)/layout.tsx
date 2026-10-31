@@ -29,7 +29,6 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               <span style={{ fontSize: 12, color: "var(--on-dark-2)" }}>27.03 USDC · verified on Stellar</span>
             </span>
           </div>
-          <span className={styles.credit}>Photo: Ahmed Nasiru / Unsplash</span>
         </div>
       </div>
     </div>

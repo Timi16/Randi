@@ -14,13 +14,13 @@ const MARQUEE = ["Salons", "Spaza shops", "Bakeries", "Market stalls", "Tailors"
 
 // Prices at R18.50 = 1 USDC (worked out with the same maths as the API).
 const EXAMPLES = [
-  { what: "Knotless braids", zar: "R650.00", usdc: "35.14", img: "/photos/braids-fan.jpg", pos: "50% 30%", credit: "Shedrack Salami", alt: "A woman with long braids holding a yellow fan" },
-  { what: "Beadwork necklace", zar: "R450.00", usdc: "24.33", img: "/photos/red-headwrap.jpg", pos: "50% 25%", credit: "Steward Masweneng", alt: "A smiling woman in a red headwrap and beaded necklaces" },
-  { what: "Phone screen repair", zar: "R350.00", usdc: "18.92", img: "/photos/market-phone.jpg", pos: "50% 25%", credit: "proudlyswazi", alt: "A woman with braids talking on her phone at an outdoor market" },
-  { what: "Sneaker clean", zar: "R180.00", usdc: "9.73", img: "/photos/red-crate.jpg", pos: "50% 50%", credit: "abolova", alt: "A man in black crouching on a red crate in a field" },
-  { what: "Suit hire, one day", zar: "R2,220.00", usdc: "120.00", img: "/photos/corduroy.jpg", pos: "50% 20%", credit: "Dion Martins", alt: "A man in sunglasses, corduroy jacket and paisley tie" },
-  { what: "Festival face paint", zar: "R120.00", usdc: "6.49", img: "/photos/face-paint.jpg", pos: "50% 40%", credit: "Mpumelelo Macu", alt: "Two people with white face paint in a township street" },
-  { what: "Kota and chips", zar: "R85.00", usdc: "4.60", img: "/photos/aloe.jpg", pos: "50% 30%", credit: "Karabo Mdluli", alt: "A young man in a black sweater in front of aloe plants" },
+  { what: "Knotless braids", zar: "R650.00", usdc: "35.14", img: "/photos/braids-fan.jpg", pos: "50% 30%", alt: "A woman with long braids holding a yellow fan" },
+  { what: "Beadwork necklace", zar: "R450.00", usdc: "24.33", img: "/photos/red-headwrap.jpg", pos: "50% 25%", alt: "A smiling woman in a red headwrap and beaded necklaces" },
+  { what: "Phone screen repair", zar: "R350.00", usdc: "18.92", img: "/photos/market-phone.jpg", pos: "50% 25%", alt: "A woman with braids talking on her phone at an outdoor market" },
+  { what: "Sneaker clean", zar: "R180.00", usdc: "9.73", img: "/photos/red-crate.jpg", pos: "50% 50%", alt: "A man in black crouching on a red crate in a field" },
+  { what: "Suit hire, one day", zar: "R2,220.00", usdc: "120.00", img: "/photos/corduroy.jpg", pos: "50% 20%", alt: "A man in sunglasses, corduroy jacket and paisley tie" },
+  { what: "Festival face paint", zar: "R120.00", usdc: "6.49", img: "/photos/face-paint.jpg", pos: "50% 40%", alt: "Two people with white face paint in a township street" },
+  { what: "Kota and chips", zar: "R85.00", usdc: "4.60", img: "/photos/aloe.jpg", pos: "50% 30%", alt: "A young man in a black sweater in front of aloe plants" },
 ];
 
 const STEPS = [
@@ -40,13 +40,13 @@ const CASES = [
 ];
 
 const TILES = [
-  { img: "/photos/market-phone.jpg", rows: 2, pos: "50% 25%", credit: "proudlyswazi / Unsplash", alt: "A woman with braids on her phone outdoors" },
-  { img: "/photos/bucket-hat.jpg", rows: 1, pos: "60% 40%", credit: "abolova / Unsplash", alt: "A woman in a leopard bucket hat in a Johannesburg lane" },
-  { img: "/photos/braids-fan.jpg", rows: 2, pos: "50% 30%", credit: "Shedrack Salami / Unsplash", alt: "A woman with braids and a yellow fan" },
-  { img: "/photos/face-paint.jpg", rows: 2, pos: "50% 40%", credit: "Mpumelelo Macu / Unsplash", alt: "Two people in face paint on a street" },
-  { img: "/photos/red-headwrap.jpg", rows: 2, pos: "50% 25%", credit: "Steward Masweneng / Unsplash", alt: "A woman in a red headwrap smiling" },
-  { img: "/photos/corduroy.jpg", rows: 2, pos: "50% 20%", credit: "Dion Martins / Unsplash", alt: "A man in a corduroy jacket and sunglasses" },
-  { img: "/photos/red-crate.jpg", rows: 1, pos: "50% 50%", credit: "abolova / Unsplash", alt: "A man crouching on a red crate" },
+  { img: "/photos/market-phone.jpg", rows: 2, pos: "50% 25%", alt: "A woman with braids on her phone outdoors" },
+  { img: "/photos/bucket-hat.jpg", rows: 1, pos: "60% 40%", alt: "A woman in a leopard bucket hat in a Johannesburg lane" },
+  { img: "/photos/braids-fan.jpg", rows: 2, pos: "50% 30%", alt: "A woman with braids and a yellow fan" },
+  { img: "/photos/face-paint.jpg", rows: 2, pos: "50% 40%", alt: "Two people in face paint on a street" },
+  { img: "/photos/red-headwrap.jpg", rows: 2, pos: "50% 25%", alt: "A woman in a red headwrap smiling" },
+  { img: "/photos/corduroy.jpg", rows: 2, pos: "50% 20%", alt: "A man in a corduroy jacket and sunglasses" },
+  { img: "/photos/red-crate.jpg", rows: 1, pos: "50% 50%", alt: "A man crouching on a red crate" },
 ];
 
 const FAQS = [
@@ -251,7 +251,6 @@ export function Landing() {
                     <span style={{ fontSize: 11, color: "var(--on-dark-2)" }}>Your wallet · just now</span>
                   </span>
                 </div>
-                <span className={styles.credit}>Photo: Ahmed Nasiru / Unsplash</span>
               </div>
             </div>
           </div>
@@ -311,7 +310,6 @@ export function Landing() {
                     </div>
                     <span className={styles.usdcTag}>{e.usdc} USDC</span>
                   </div>
-                  <span className={styles.photoTag}>Photo: {e.credit}</span>
                 </div>
               );
             })}
@@ -364,7 +362,6 @@ export function Landing() {
             </div>
             <figure className={styles.figure}>
               <Image src="/photos/phone-yellow.jpg" alt="A woman in a green print dress holds up her phone and smiles, against a yellow wall" fill sizes="(max-width: 900px) 100vw, 30vw" className={styles.drift} style={{ objectFit: "cover", objectPosition: "30% 50%" }} />
-              <figcaption style={{ position: "absolute", left: 16, bottom: 14, fontSize: 11, color: "rgba(14, 11, 16, 0.75)" }}>Photo: Ahmed Nasiru / Unsplash</figcaption>
             </figure>
           </div>
         </section>
@@ -469,7 +466,6 @@ export function Landing() {
             {TILES.map((t, i) => (
               <figure key={t.img + t.rows} className={styles.tile} data-reveal="" style={{ gridRow: `span ${t.rows}`, ["--d" as string]: `${(i % 4) * 110}ms` }}>
                 <Image src={t.img} alt={t.alt} fill sizes="(max-width: 700px) 100vw, 25vw" style={{ objectFit: "cover", objectPosition: t.pos }} />
-                <figcaption className={styles.tileCredit}>{t.credit}</figcaption>
               </figure>
             ))}
           </div>
@@ -537,7 +533,6 @@ export function Landing() {
           </div>
           <div className="between wrap" style={{ paddingTop: 24, borderTop: "1px solid #2B2630", fontSize: 13, color: "var(--muted-2)" }}>
             <span>Payment requests in rand, paid in USDC. Stellar Testnet only; no real money moves.</span>
-            <span>Photos via Unsplash, credited where shown.</span>
           </div>
         </div>
       </footer>

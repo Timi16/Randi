@@ -70,7 +70,7 @@ clickable.
 2. **ZAR is asked, USDC is sent.** Both always shown; on the payer's page USDC is the giant figure.
 3. **Testnet is always on screen.** Sun-yellow "Stellar Testnet" badge in every header and a yellow strip on every payment page, plus "test money, no real value" near the pay button.
 4. **No state the backend lacks.** Pending, Part-paid, Paid, Overpaid, Expired, Cancelled, Failed. "Paid." only after the worker verifies.
-5. **People photos are credited and labelled "Example"** wherever they sit next to an amount. Unsplash photos come without model releases, so they never imply that a pictured person uses Randi.
+5. **People photos carry no labels or credits on the site** (the client's choice; the Unsplash License doesn't require credit). Unsplash photos come without model releases, so copy never claims a pictured person uses Randi.
 
 ### 2.2 Colour
 
@@ -129,7 +129,7 @@ Paid. Lockup gap is half the mark's width. Full sheet on the Logo board of the d
 ### 2.7 Photography
 
 Editorial portraits of real people against bold colour, plus South African street life. All from
-Unsplash under the Unsplash License, credited on the image. Current set: Ahmed Nasiru (hero and phone
+Unsplash under the Unsplash License, which doesn't require credit; the site shows none, so the photographers are recorded here: Ahmed Nasiru (hero and phone
 section), Prince Akachi, Shedrack Salami, Steward Masweneng, Mpumelelo Macu, Karabo Mdluli, Dion
 Martins, abolova. Before launch, replace people shown next to example amounts with commissioned
 photography and model releases.

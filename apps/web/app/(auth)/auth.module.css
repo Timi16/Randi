@@ -63,13 +63,6 @@
   gap: 14px;
 }
 
-.credit {
-  position: absolute;
-  right: 18px;
-  top: 16px;
-  font-size: 11px;
-  color: rgba(14, 11, 16, 0.7);
-}
 
 @media (max-width: 860px) {
   .photo {
