@@ -181,6 +181,8 @@ counter → "Paid means paid." protea panel listing what gets checked → "Mzans
 → FAQs accordion → "Start charging in rand." → ink footer with the giant wordmark. Copy in
 [Copy.md](Copy.md). No partner logos, stats or testimonials until they are real.
 
+Scroll motion: sections rise in once as they enter the view; steps, "what's checked" rows and FAQs stagger; the people photos wipe up and settle from a zoom; the hero and customer photos drift slowly. The hero headline is sized to its own column (`13cqi`), so the longest rotating word always fits. All of it is off under reduced motion.
+
 ## 5. Merchant screens
 
 ### 5.1 Sign-up and onboarding

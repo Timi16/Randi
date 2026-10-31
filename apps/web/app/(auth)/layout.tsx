@@ -26,7 +26,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             </span>
             <span className="stack" style={{ gap: 0 }}>
               <span style={{ fontWeight: 800 }}>R500.00 · Paid</span>
-              <span style={{ fontSize: 12, color: "var(--on-dark-2)" }}>27.03 USDC · verified on Stellar · example</span>
+              <span style={{ fontSize: 12, color: "var(--on-dark-2)" }}>27.03 USDC · verified on Stellar</span>
             </span>
           </div>
           <span className={styles.credit}>Photo: Ahmed Nasiru / Unsplash</span>

@@ -12,7 +12,7 @@ import styles from "./landing.module.css";
 const WORDS = ["in USDC.", "in seconds.", "with proof."];
 const MARQUEE = ["Salons", "Spaza shops", "Bakeries", "Market stalls", "Tailors", "Kota spots", "Barbers", "Caterers", "Car washes", "Beadwork"];
 
-// Example prices at R18.50 = 1 USDC (worked out with the same maths as the API).
+// Prices at R18.50 = 1 USDC (worked out with the same maths as the API).
 const EXAMPLES = [
   { what: "Knotless braids", zar: "R650.00", usdc: "35.14", img: "/photos/braids-fan.jpg", pos: "50% 30%", credit: "Shedrack Salami", alt: "A woman with long braids holding a yellow fan" },
   { what: "Beadwork necklace", zar: "R450.00", usdc: "24.33", img: "/photos/red-headwrap.jpg", pos: "50% 25%", credit: "Steward Masweneng", alt: "A smiling woman in a red headwrap and beaded necklaces" },
@@ -43,9 +43,9 @@ const TILES = [
   { img: "/photos/market-phone.jpg", rows: 2, pos: "50% 25%", credit: "proudlyswazi / Unsplash", alt: "A woman with braids on her phone outdoors" },
   { img: "/photos/bucket-hat.jpg", rows: 1, pos: "60% 40%", credit: "abolova / Unsplash", alt: "A woman in a leopard bucket hat in a Johannesburg lane" },
   { img: "/photos/braids-fan.jpg", rows: 2, pos: "50% 30%", credit: "Shedrack Salami / Unsplash", alt: "A woman with braids and a yellow fan" },
-  { img: "/photos/face-paint.jpg", rows: 1, pos: "50% 40%", credit: "Mpumelelo Macu / Unsplash", alt: "Two people in face paint on a street" },
+  { img: "/photos/face-paint.jpg", rows: 2, pos: "50% 40%", credit: "Mpumelelo Macu / Unsplash", alt: "Two people in face paint on a street" },
   { img: "/photos/red-headwrap.jpg", rows: 2, pos: "50% 25%", credit: "Steward Masweneng / Unsplash", alt: "A woman in a red headwrap smiling" },
-  { img: "/photos/corduroy.jpg", rows: 1, pos: "50% 20%", credit: "Dion Martins / Unsplash", alt: "A man in a corduroy jacket and sunglasses" },
+  { img: "/photos/corduroy.jpg", rows: 2, pos: "50% 20%", credit: "Dion Martins / Unsplash", alt: "A man in a corduroy jacket and sunglasses" },
   { img: "/photos/red-crate.jpg", rows: 1, pos: "50% 50%", credit: "abolova / Unsplash", alt: "A man crouching on a red crate" },
 ];
 
@@ -98,6 +98,28 @@ export function Landing() {
       clearInterval(w);
       clearInterval(c);
     };
+  }, []);
+
+  // Scroll motion: each [data-reveal] element animates in once, when it scrolls into view.
+  useEffect(() => {
+    const shown = styles.shown ?? "shown";
+    const els = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+      for (const el of els) el.classList.add(shown);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add(shown);
+          io.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
+    );
+    for (const el of els) io.observe(el);
+    return () => io.disconnect();
   }, []);
 
   useEffect(() => {
@@ -181,7 +203,7 @@ export function Landing() {
             </div>
             <div className={styles.heroMedia}>
               <div className={styles.photo}>
-                <Image src="/photos/hero-wave.jpg" alt="A woman in a green print dress smiles at her phone and waves, against a magenta wall" fill priority sizes="(max-width: 1000px) 100vw, 50vw" style={{ objectFit: "cover", objectPosition: "46% 20%" }} />
+                <Image src="/photos/hero-wave.jpg" alt="A woman in a green print dress smiles at her phone and waves, against a magenta wall" fill priority sizes="(max-width: 1000px) 100vw, 50vw" className={styles.drift} style={{ objectFit: "cover", objectPosition: "46% 20%" }} />
                 <div className={styles.liveCard} aria-live="polite">
                   <div className="row" style={{ gap: 8 }}>
                     <Mark size={26} />
@@ -229,7 +251,7 @@ export function Landing() {
                     <span style={{ fontSize: 11, color: "var(--on-dark-2)" }}>Your wallet · just now</span>
                   </span>
                 </div>
-                <span className={styles.credit}>Photo: Ahmed Nasiru / Unsplash · example request</span>
+                <span className={styles.credit}>Photo: Ahmed Nasiru / Unsplash</span>
               </div>
             </div>
           </div>
@@ -250,7 +272,7 @@ export function Landing() {
 
         <section className={styles.section}>
           <div className={styles.carouselHead}>
-            <h2 className={styles.h2}>
+            <h2 className={styles.h2} data-reveal="">
               Any price.
               <br />
               Any hustle.
@@ -267,7 +289,7 @@ export function Landing() {
               </div>
             </div>
           </div>
-          <div className={styles.stage}>
+          <div className={styles.stage} data-reveal="scale">
             {EXAMPLES.map((e, i) => {
               let off = (i - car + n) % n;
               if (off > n / 2) off -= n;
@@ -289,7 +311,7 @@ export function Landing() {
                     </div>
                     <span className={styles.usdcTag}>{e.usdc} USDC</span>
                   </div>
-                  <span className={styles.photoTag}>Example · {e.credit}</span>
+                  <span className={styles.photoTag}>Photo: {e.credit}</span>
                 </div>
               );
             })}
@@ -297,10 +319,10 @@ export function Landing() {
         </section>
 
         <section id="customer" className={styles.panelWrap}>
-          <div className={styles.darkPanel}>
+          <div className={styles.darkPanel} data-reveal="scale">
             <div className="stack" style={{ flex: "1 1 340px", minWidth: 0, gap: 22 }}>
               <span className={styles.tag}>For your customer</span>
-              <h2 className={styles.h2}>
+              <h2 className={styles.h2} data-reveal="">
                 No app. No account.
                 <br />
                 <span style={{ color: "var(--sun)" }}>Just pay.</span>
@@ -341,21 +363,21 @@ export function Landing() {
               </div>
             </div>
             <figure className={styles.figure}>
-              <Image src="/photos/phone-yellow.jpg" alt="A woman in a green print dress holds up her phone and smiles, against a yellow wall" fill sizes="(max-width: 900px) 100vw, 30vw" style={{ objectFit: "cover", objectPosition: "30% 50%" }} />
+              <Image src="/photos/phone-yellow.jpg" alt="A woman in a green print dress holds up her phone and smiles, against a yellow wall" fill sizes="(max-width: 900px) 100vw, 30vw" className={styles.drift} style={{ objectFit: "cover", objectPosition: "30% 50%" }} />
               <figcaption style={{ position: "absolute", left: 16, bottom: 14, fontSize: 11, color: "rgba(14, 11, 16, 0.75)" }}>Photo: Ahmed Nasiru / Unsplash</figcaption>
             </figure>
           </div>
         </section>
 
         <section id="how" className={`${styles.container} ${styles.section}`}>
-          <h2 className={styles.h2} style={{ marginBottom: 36 }}>
+          <h2 className={styles.h2} data-reveal="" style={{ marginBottom: 36 }}>
             Four steps.
             <br />
             Zero sums.
           </h2>
           <div className={styles.steps}>
             {STEPS.map((s, i) => (
-              <button key={s.n} type="button" className={styles.step} aria-expanded={step === i} onClick={() => setStep(i)} style={{ flex: step === i ? "3.2 1 380px" : "1 1 200px", background: s.bg, color: s.fg }}>
+              <button key={s.n} type="button" className={styles.step} data-reveal="" aria-expanded={step === i} onClick={() => setStep(i)} style={{ ["--d" as string]: `${i * 90}ms`, flex: step === i ? "3.2 1 380px" : "1 1 200px", background: s.bg, color: s.fg }}>
                 <span className="mono" style={{ fontSize: 14, fontWeight: 700 }}>
                   {s.n}
                 </span>
@@ -373,14 +395,14 @@ export function Landing() {
         <section className={`${styles.container} ${styles.section}`} style={{ display: "flex", flexWrap: "wrap", gap: 40, alignItems: "center" }}>
           <div className="stack" style={{ flex: "1 1 380px", minWidth: 0, gap: 18 }}>
             <span className={styles.tag}>Your rate, not a live exchange rate</span>
-            <h2 className={styles.h2}>
+            <h2 className={styles.h2} data-reveal="">
               Two amounts.
               <br />
               One gets checked.
             </h2>
             <p style={{ margin: 0, fontSize: 16, color: "var(--text-2)", maxWidth: 480 }}>Your customer sees both. Randi only checks the USDC.</p>
           </div>
-          <div className={styles.amountBox}>
+          <div className={styles.amountBox} data-reveal="scale">
             <label className="stack" style={{ gap: 8, fontSize: 14, fontWeight: 600 }}>
               Type a price in rand
               <span className={styles.zarField}>
@@ -419,14 +441,14 @@ export function Landing() {
         </section>
 
         <section id="checked" className={styles.panelWrap} style={{ paddingTop: "clamp(72px, 12vh, 128px)" }}>
-          <div className={styles.proteaPanel}>
+          <div className={styles.proteaPanel} data-reveal="scale">
             <div className="stack" style={{ flex: "1 1 380px", minWidth: 0, gap: 20 }}>
-              <h2 className={styles.h2}>Paid means paid.</h2>
+              <h2 className={styles.h2} data-reveal="">Paid means paid.</h2>
               <p style={{ margin: 0, fontSize: 16, maxWidth: 420, color: "#FFE3EE" }}>Only a real Stellar transaction counts. Screenshots don&apos;t.</p>
             </div>
             <div style={{ flex: "1 1 460px", minWidth: 0 }}>
-              {CASES.map((c) => (
-                <div key={c.did} className={styles.caseRow}>
+              {CASES.map((c, i) => (
+                <div key={c.did} className={styles.caseRow} data-reveal="left" style={{ ["--d" as string]: `${150 + i * 80}ms` }}>
                   <span>{c.did}</span>
                   <span className={styles.caseTag} style={{ background: c.bg, color: c.fg }}>
                     {c.tag}
@@ -438,14 +460,14 @@ export function Landing() {
         </section>
 
         <section className={`${styles.container} ${styles.section}`}>
-          <h2 className={styles.h2} style={{ marginBottom: 32 }}>
+          <h2 className={styles.h2} data-reveal="" style={{ marginBottom: 32 }}>
             Mzansi
             <br />
             gets paid.
           </h2>
           <div className={styles.tiles}>
-            {TILES.map((t) => (
-              <figure key={t.img + t.rows} className={styles.tile} style={{ gridRow: `span ${t.rows}` }}>
+            {TILES.map((t, i) => (
+              <figure key={t.img + t.rows} className={styles.tile} data-reveal="" style={{ gridRow: `span ${t.rows}`, ["--d" as string]: `${(i % 4) * 110}ms` }}>
                 <Image src={t.img} alt={t.alt} fill sizes="(max-width: 700px) 100vw, 25vw" style={{ objectFit: "cover", objectPosition: t.pos }} />
                 <figcaption className={styles.tileCredit}>{t.credit}</figcaption>
               </figure>
@@ -454,14 +476,14 @@ export function Landing() {
         </section>
 
         <section id="faq" className={`${styles.container} ${styles.section}`} style={{ display: "flex", flexWrap: "wrap", gap: 40 }}>
-          <h2 className={styles.h2} style={{ flex: "1 1 300px" }}>
+          <h2 className={styles.h2} data-reveal="" style={{ flex: "1 1 300px" }}>
             FAQs
           </h2>
           <div style={{ flex: "2 1 520px", minWidth: 0 }}>
             {FAQS.map((f, i) => {
               const open = faq === i;
               return (
-                <div key={f.q} className={styles.faqItem}>
+                <div key={f.q} className={styles.faqItem} data-reveal="" style={{ ["--d" as string]: `${i * 60}ms` }}>
                   <button type="button" className={styles.faqBtn} aria-expanded={open} onClick={() => setFaq(open ? -1 : i)}>
                     {f.q}
                     <span className={styles.faqChip} style={{ background: open ? "var(--protea)" : "var(--ink)", transform: `rotate(${open ? 45 : 0}deg)` }}>
