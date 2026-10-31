@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { Icon } from "./Icon";
 
 interface Props {
@@ -15,7 +16,8 @@ interface Props {
 /**
  * A modal dialog (a bottom sheet on phones). Traps focus, closes on Escape or the × button,
  * and returns focus to whatever opened it. The backdrop does not close it: a stray tap must
- * not lose a half-finished payment or form.
+ * not lose a half-finished payment or form. Rendered into <body>, so an animated (transformed)
+ * parent can't trap the fixed backdrop inside itself.
  */
 export function Dialog({ title, onClose, children, subtitle, width }: Props) {
   const ref = useRef<HTMLDivElement>(null);
@@ -59,7 +61,7 @@ export function Dialog({ title, onClose, children, subtitle, width }: Props) {
     };
   }, []);
 
-  return (
+  return createPortal(
     <div className="backdrop">
       <div ref={ref} className="dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title" style={width ? { width: `min(${width}px, 100%)` } : undefined}>
         <div className="dialog-head">
@@ -73,6 +75,7 @@ export function Dialog({ title, onClose, children, subtitle, width }: Props) {
         </div>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
