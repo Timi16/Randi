@@ -6,7 +6,7 @@ import { Icon } from "@/components/Icon";
 import { formatAmount, shortAddress } from "@/lib/format";
 import { PayError, preparePayment, signAndSubmit, type PreparedPayment } from "@/lib/stellar-pay";
 import type { Checkout } from "@/lib/types";
-import { connectWallet, listWallets, WalletError, walletName, type WalletKind, type WalletOption } from "@/lib/wallets";
+import { connectWallet, listWallets, WALLET_TILE, WalletError, walletName, type WalletKind, type WalletOption } from "@/lib/wallets";
 import styles from "./pay.module.css";
 
 type Stage =
@@ -105,10 +105,12 @@ export function WalletSheet({ checkout, onClose, onManual, onSent }: Props) {
             : wallets.map((w) => {
                 const inner = (
                   <>
-                    <span className={styles.walletIcon}>{w.icon ? <img src={w.icon} alt="" /> : w.name[0]}</span>
+                    <span className={styles.walletIcon} aria-hidden="true" style={WALLET_TILE[w.kind]}>
+                      {w.letter}
+                    </span>
                     <span className="stack" style={{ gap: 0, flex: 1 }}>
                       <span style={{ fontWeight: 800 }}>{w.name}</span>
-                      <span className="hint">{w.available ? (w.kind === "albedo" ? "Works in any browser, no install" : "Browser extension") : "Not installed in this browser"}</span>
+                      <span className="hint">{w.available ? (w.kind === "freighter" ? "Browser extension" : "Opens in a new window, no install needed") : "Not installed in this browser"}</span>
                     </span>
                   </>
                 );

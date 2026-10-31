@@ -452,9 +452,9 @@
   flex-shrink: 0;
 }
 
-.walletIcon img {
-  width: 28px;
-  height: 28px;
+.walletIcon {
+  font-weight: 900;
+  font-size: 18px;
 }
 
 .review {

@@ -7,7 +7,7 @@ import { Icon } from "@/components/Icon";
 import { api, ApiError, errorMessage } from "@/lib/api";
 import { looksLikeAddress, looksLikeSecret, shortAddress } from "@/lib/format";
 import type { ChallengeResponse, Wallet } from "@/lib/types";
-import { connectWallet, listWallets, signMessage, WalletError, walletName, type WalletKind, type WalletOption } from "@/lib/wallets";
+import { connectWallet, listWallets, signMessage, WALLET_TILE, WalletError, walletName, type WalletKind, type WalletOption } from "@/lib/wallets";
 import { WalletChecks } from "./WalletChecks";
 
 type Step =
@@ -130,7 +130,9 @@ export function ConnectWalletDialog({ onClose, onDone, verifyWallet, existing }:
             ? [0, 1].map((i) => <div key={i} className="skeleton" style={{ height: 66 }} />)
             : options.map((w) => (
                 <button key={w.kind} type="button" className="btn btn-outline btn-block" style={{ height: 66, justifyContent: "flex-start", gap: 12, borderRadius: 16 }} onClick={() => void viaWallet(w.kind)} disabled={!w.available}>
-                  {w.icon ? <img src={w.icon} alt="" width={30} height={30} style={{ borderRadius: 8 }} /> : null}
+                  <span aria-hidden="true" style={{ ...WALLET_TILE[w.kind], width: 34, height: 34, borderRadius: 10, display: "inline-flex", alignItems: "center", justifyContent: "center", fontWeight: 900 }}>
+                    {w.letter}
+                  </span>
                   <span className="stack" style={{ gap: 0, alignItems: "flex-start", flex: 1 }}>
                     <span>{w.name}</span>
                     <span className="hint" style={{ fontWeight: 500 }}>

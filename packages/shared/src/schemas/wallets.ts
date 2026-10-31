@@ -49,7 +49,7 @@ export const WalletSchema = z.object({
   verifiedAt: z.string().nullable(),
   accountExists: z.boolean(),
   trustlines: z.array(TrustlineSchema),
-  canReceive: z.record(ReceiveCheckSchema),
+  canReceive: z.record(z.string(), ReceiveCheckSchema),
   checkedAt: z.string().nullable(),
   createdAt: z.string(),
 });

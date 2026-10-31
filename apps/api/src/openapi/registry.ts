@@ -1,8 +1,6 @@
-import { extendZodWithOpenApi, OpenApiGeneratorV3, OpenAPIRegistry, type RouteConfig } from "@asteasolutions/zod-to-openapi";
+import { OpenApiGeneratorV3, OpenAPIRegistry, type RouteConfig } from "@asteasolutions/zod-to-openapi";
 import { z } from "zod";
 import * as s from "@randi/shared";
-
-extendZodWithOpenApi(z);
 
 type Auth = "public" | "session";
 
@@ -12,12 +10,12 @@ interface RouteSpec {
   summary: string;
   tag: string;
   auth: Auth;
-  params?: z.AnyZodObject;
-  query?: z.AnyZodObject;
-  body?: z.ZodTypeAny;
-  headers?: z.AnyZodObject;
+  params?: z.ZodObject;
+  query?: z.ZodObject;
+  body?: z.ZodType;
+  headers?: z.ZodObject;
   /** status -> schema (null = no body) */
-  success: Record<number, z.ZodTypeAny | null>;
+  success: Record<number, z.ZodType | null>;
   errors?: number[];
   description?: string;
 }
@@ -30,6 +28,18 @@ const ERROR_DESCRIPTIONS: Record<number, string> = {
   409: "Conflict with the current state",
   429: "Rate limited (see Retry-After)",
   503: "Dependency unavailable",
+};
+
+// Named components. zod 4 keeps names in its global registry (`.meta({ id })`), which the
+// generator reads as the $ref; each id may be registered once, so this runs at module load.
+const ErrorResponse = s.ErrorResponseSchema.meta({ id: "Error" });
+const schemas = {
+  PaymentRequest: s.RequestSchema.meta({ id: "PaymentRequest" }),
+  Pricing: s.PricingSettingsSchema.meta({ id: "PricingSettings" }),
+  ChainPayment: s.PaymentSchema.meta({ id: "ChainPayment" }),
+  RequestEvent: s.RequestEventSchema.meta({ id: "RequestEvent" }),
+  Checkout: s.CheckoutSchema.meta({ id: "Checkout" }),
+  Health: s.HealthSchema.meta({ id: "Health" }),
 };
 
 /**
@@ -46,15 +56,6 @@ export function buildOpenApiDocument(serverUrl?: string) {
     description: "Set by POST /auth/login. State-changing calls must also send an Origin equal to the web app's origin.",
   });
 
-  const ErrorResponse = registry.register("Error", s.ErrorResponseSchema);
-  const schemas = {
-    PaymentRequest: registry.register("PaymentRequest", s.RequestSchema),
-    Pricing: registry.register("PricingSettings", s.PricingSettingsSchema),
-    ChainPayment: registry.register("ChainPayment", s.PaymentSchema),
-    RequestEvent: registry.register("RequestEvent", s.RequestEventSchema),
-    Checkout: registry.register("Checkout", s.CheckoutSchema),
-    Health: registry.register("Health", s.HealthSchema),
-  };
 
   const add = (spec: RouteSpec) => {
     const responses: RouteConfig["responses"] = {};
@@ -87,7 +88,7 @@ export function buildOpenApiDocument(serverUrl?: string) {
     });
   };
 
-  const sse = z.string().openapi({ description: "text/event-stream" });
+  const sse = z.string().meta({ description: "text/event-stream" });
 
   // Auth
   add({ method: "post", path: "/auth/signup", summary: "Create a merchant account", tag: "Auth", auth: "public", body: s.SignupBody, success: { 201: s.MerchantResponse }, errors: [400, 403, 409] });
@@ -143,7 +144,9 @@ export function buildOpenApiDocument(serverUrl?: string) {
   add({ method: "get", path: "/public/pay/{publicId}/events", summary: "Stream payment status", description: "Server-Sent Events: a `status` event on connect and on every change.", tag: "Public payment page", auth: "public", params: s.PublicIdParamsSchema, success: { 200: sse }, errors: [404] });
   add({ method: "get", path: "/health", summary: "Health", description: "Database status, last processed ledger, lag in seconds and open request count.", tag: "System", auth: "public", success: { 200: schemas.Health }, errors: [503] });
 
-  return new OpenApiGeneratorV3(registry.definitions).generateDocument({
+  // Every named model is listed in components, even ones no route returns on its own.
+  const models = [ErrorResponse, ...Object.values(schemas)].map((schema) => ({ type: "schema" as const, schema }));
+  return new OpenApiGeneratorV3([...registry.definitions, ...models]).generateDocument({
     openapi: "3.0.3",
     info: {
       title: "Randi API",

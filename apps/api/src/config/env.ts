@@ -1,7 +1,7 @@
 import { Networks, StrKey } from "@stellar/stellar-sdk";
 import { z } from "zod";
 
-export const TESTNET_PASSPHRASE = Networks.TESTNET; // "Test SDF Network ; September 2015"
+export const TESTNET_PASSPHRASE: string = Networks.TESTNET; // "Test SDF Network ; September 2015"
 
 const url = z.string().url();
 
@@ -15,9 +15,7 @@ export const EnvSchema = z.object({
   STELLAR_RPC_URL: url,
   HORIZON_URL: url,
   // Testnet only: Randi refuses to boot against any other network.
-  NETWORK_PASSPHRASE: z.literal(TESTNET_PASSPHRASE, {
-    errorMap: () => ({ message: `must be the testnet passphrase "${TESTNET_PASSPHRASE}"` }),
-  }),
+  NETWORK_PASSPHRASE: z.literal(TESTNET_PASSPHRASE, { error: `must be the testnet passphrase "${TESTNET_PASSPHRASE}"` }),
   USDC_ISSUER: z
     .string()
     .refine((v) => StrKey.isValidEd25519PublicKey(v), "must be a valid G address"),

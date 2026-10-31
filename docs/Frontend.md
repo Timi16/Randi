@@ -19,7 +19,7 @@ The frontend **never decides** whether something is paid. It shows what the API 
 | Styling | Plain CSS with design tokens (CSS variables) in one global stylesheet, plus small component classes. No UI kit |
 | Data | Typed fetch client built on the shared Zod schemas (`packages/shared`); cookies sent with requests |
 | Live status | Server-Sent Events, with polling every 5 s as fallback |
-| Wallet | Stellar Wallets Kit modules, loaded only when used: Freighter (the kit's Varial module), xBull, Albedo. Wallet proof is a SEP-53 signed message, so only Freighter and xBull can prove a wallet (Albedo can't sign messages); all three can pay on the payment page |
+| Wallet | Each wallet's own library, loaded only when used: `@stellar/freighter-api`, `@creit.tech/xbull-wallet-connect`, `@albedo-link/intent` (the same ones Stellar Wallets Kit wraps; the kit itself pulled in Ledger, Trezor, WalletConnect and their advisories for wallets Randi doesn't offer). Wallet proof is a SEP-53 signed message, so only Freighter and xBull can prove a wallet (Albedo can't sign messages); all three can pay on the payment page |
 | QR codes | A small QR library rendering the SEP-7 payment link |
 | Tests | Unit tests of `lib/` (Vitest) and an end-to-end walkthrough on Testnet (`e2e/walkthrough.mjs`, Playwright) |
 
@@ -357,7 +357,7 @@ The QR code holds a **SEP-7** payment link (destination, amount, USDC asset, mem
 
 ### 6.3 Pay with a wallet
 
-"Pay with wallet" opens a sheet listing Freighter, xBull and Albedo (Stellar Wallets Kit), with
+"Pay with wallet" opens a sheet listing Freighter, xBull and Albedo, with
 "Pay from any other wallet" (address, amount, memo, each with Copy) underneath. The sheet closes
 only with its × button or Escape. For the wallet the customer picks:
 

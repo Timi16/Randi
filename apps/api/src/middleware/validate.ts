@@ -19,7 +19,7 @@ export const rejectNulBytes: RequestHandler = (req, _res, next) => {
 };
 
 /** Parses `data` with a strict Zod schema or throws VALIDATION_FAILED. */
-export function parse<S extends z.ZodTypeAny>(schema: S, data: unknown): z.infer<S> {
+export function parse<S extends z.ZodType>(schema: S, data: unknown): z.infer<S> {
   const result = schema.safeParse(data);
   if (!result.success) {
     const details = zodDetails(result.error);
